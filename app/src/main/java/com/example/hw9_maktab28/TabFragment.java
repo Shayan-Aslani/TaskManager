@@ -24,13 +24,16 @@ import java.util.Random;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TodoTaskTab extends Fragment {
+public class TabFragment extends Fragment {
 
 
     private RecyclerView toDoRecyclerView ;
     private List<Task> list;
     private TaskAdapter taskAdapter;
-    public TodoTaskTab() {
+    private State tabState ;
+
+    public TabFragment(State state) {
+        tabState = state;
         // Required empty public constructor
     }
 
@@ -39,7 +42,7 @@ public class TodoTaskTab extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_todo_task_tab, container, false);
+        return inflater.inflate(R.layout.fragment_tab, container, false);
     }
 
     @Override
@@ -48,7 +51,7 @@ public class TodoTaskTab extends Fragment {
         toDoRecyclerView = view.findViewById(R.id.task_recyclerView);
         toDoRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         for (int i = 0 ; i<10 ; i++){
-            Repository.getInstance().addTask(new Task("aaa" , getRdmState()));
+            Repository.getInstance().addTask(new Task("aaa" , tabState));
         }
         list = Repository.getInstance().getTaskList();
         taskAdapter = new TaskAdapter(list);
@@ -59,4 +62,5 @@ public class TodoTaskTab extends Fragment {
         int index = new Random().nextInt(State.values().length);
         return State.values()[index];
     }
+
 }

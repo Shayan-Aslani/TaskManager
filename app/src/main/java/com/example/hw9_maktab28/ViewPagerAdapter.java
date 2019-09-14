@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
+import com.example.hw9_maktab28.model.State;
+
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -13,9 +15,9 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position){
-            case 0: return new TodoTaskTab();
-            case 1: return new DoingTaskTab();
-            case 2: return new DoneTaskTab();
+            case 0: return new TabFragment(State.Todo);
+            case 1: return new TabFragment(State.Doing);
+            case 2: return new TabFragment(State.Done);
         }
         return null;
     }
