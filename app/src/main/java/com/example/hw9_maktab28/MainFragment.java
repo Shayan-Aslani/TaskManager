@@ -43,4 +43,5 @@ public class MainFragment extends Fragment {
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
     }
+
 }

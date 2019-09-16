@@ -3,9 +3,11 @@ package com.example.hw9_maktab28;
 import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hw9_maktab28.model.Task;
@@ -15,11 +17,16 @@ import java.util.List;
 
     public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
 
-        private List<Task> taskList;
+        public static final String TASK_DETAIL_FRAGMENT_TAG = "TaskDetail";
 
-        public TaskAdapter(List<Task> taskList)
+
+        private List<Task> taskList;
+        public static Fragment fragment;
+
+        public TaskAdapter(List<Task> taskList , Fragment fragment)
         {
             this.taskList = taskList;
+            this.fragment = fragment;
         }
 
         @NonNull
@@ -49,9 +56,9 @@ import java.util.List;
             private TextView numberTextView;
 
 
-
-            public TaskViewHolder(@NonNull View itemView) {
+            public TaskViewHolder(@NonNull final View itemView) {
                 super(itemView);
+
 
                 taskNameTextView = itemView.findViewById(R.id.taskName_textView);
                 taskStateTextView = itemView.findViewById(R.id.taskState_textView);
@@ -59,14 +66,28 @@ import java.util.List;
 
             }
 
+
+
             public void bind(final Task task)
             {
+
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        TaskDetailFragment taskDetailFragment = TaskDetailFragment.newInstance(task.getId());
+
+                        taskDetailFragment.setTargetFragment(fragment , 0);
+
+                        taskDetailFragment.show(fragment.getFragmentManager() , TASK_DETAIL_FRAGMENT_TAG);
+                    }
+                });
+
                 if(getAdapterPosition()% 2 == 0)
                     itemView.setBackgroundColor(0xFFEC407A);
                 else
                     itemView.setBackgroundColor(0xFFF5B9CD);
 
-                taskNameTextView.setText("Task Name : " + task.getName());
+                taskNameTextView.setText("Task Name : " + task.getTitle());
                 taskStateTextView.setText("State : " + task.getState().toString());
                 numberTextView.setText("Number : " + (getAdapterPosition()+1));
             }

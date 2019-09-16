@@ -8,7 +8,12 @@ import androidx.viewpager.widget.ViewPager;
 import android.os.Bundle;
 import android.view.View;
 
+import com.example.hw9_maktab28.model.Repository;
+import com.example.hw9_maktab28.model.State;
+import com.example.hw9_maktab28.model.Task;
 import com.google.android.material.tabs.TabLayout;
+
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,5 +31,10 @@ public class MainActivity extends AppCompatActivity {
                     .add(R.id.main_container_layout, new MainFragment())
                     .commit();
 
+    }
+
+    private State getRdmState() {
+        int index = new Random().nextInt(State.values().length);
+        return State.values()[index];
     }
 }

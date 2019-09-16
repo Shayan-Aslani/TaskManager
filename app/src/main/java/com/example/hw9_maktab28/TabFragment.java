@@ -1,6 +1,7 @@
 package com.example.hw9_maktab28;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,9 +17,9 @@ import android.view.ViewGroup;
 import com.example.hw9_maktab28.model.Repository;
 import com.example.hw9_maktab28.model.State;
 import com.example.hw9_maktab28.model.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
-import java.util.Random;
 
 
 /**
@@ -27,10 +28,13 @@ import java.util.Random;
 public class TabFragment extends Fragment {
 
 
-    private RecyclerView toDoRecyclerView ;
+    private RecyclerView taskRecyclerView;
     private List<Task> list;
     private TaskAdapter taskAdapter;
     private State tabState ;
+    private FloatingActionButton fab;
+    public static final String ADD_TASK_FRAGMENT_TAG = "AddTask";
+
 
     public TabFragment(State state) {
         tabState = state;
@@ -42,25 +46,40 @@ public class TabFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_tab, container, false);
+        final View view = inflater.inflate(R.layout.fragment_tab, container, false);
+        initUi(view);
+
+        taskRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        list = Repository.getInstance().getStateTaskList(tabState);
+        taskAdapter = new TaskAdapter(list , this);
+        taskRecyclerView.setAdapter(taskAdapter);
+        if(list.size() == 0)
+            taskRecyclerView.setBackgroundColor(Color.BLUE);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                AddTaskFragment addTaskFragment = AddTaskFragment.newInstance();
+
+                addTaskFragment.setTargetFragment(TabFragment.this, 0);
+
+                addTaskFragment.show(getFragmentManager(), ADD_TASK_FRAGMENT_TAG);
+
+                taskAdapter.notifyDataSetChanged();
+            }
+        });
+
+        return view;
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        toDoRecyclerView = view.findViewById(R.id.task_recyclerView);
-        toDoRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        for (int i = 0 ; i<10 ; i++){
-            Repository.getInstance().addTask(new Task("aaa" , tabState));
-        }
-        list = Repository.getInstance().getTaskList();
-        taskAdapter = new TaskAdapter(list);
-        toDoRecyclerView.setAdapter(taskAdapter);
+    private void initUi(View view)
+    {
+        fab = view.findViewById(R.id.fab);
+        taskRecyclerView = view.findViewById(R.id.task_recyclerView);
     }
 
-    private State getRdmState() {
-        int index = new Random().nextInt(State.values().length);
-        return State.values()[index];
-    }
+
+
 
 }
