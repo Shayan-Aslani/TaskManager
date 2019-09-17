@@ -12,11 +12,15 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.CheckBox;
+import android.widget.Toast;
 
 import com.example.hw9_maktab28.model.Repository;
 import com.example.hw9_maktab28.model.State;
@@ -24,6 +28,7 @@ import com.example.hw9_maktab28.model.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -39,20 +44,28 @@ public class AddTaskFragment extends DialogFragment {
     public static final String TIME_PICKER_FRAGMENT_TAG = "TimePicker";
     public static final int REQUEST_CODE_DATE_PICKER = 0;
     public static final int REQUEST_CODE_TIME_PICKER = 1;
+    public static final String ARG_TAB_STATE = "TabState";
+    public static final String ARG_TAB_ADAPTER = "TabAdapter";
 
     private TextInputEditText titleEditText ;
     private TextInputEditText descriptionEditText ;
     private MaterialButton dateButton;
     private MaterialButton timeButton ;
     private CheckBox doneCheckBox;
+    private State tabState;
+    private TaskAdapter taskAdapter;
     Calendar taskCalendar = new GregorianCalendar();
 
     private Task mTask = new Task();
 
-    public static AddTaskFragment newInstance() {
+
+
+    public static AddTaskFragment newInstance(State tabState , TaskAdapter taskAdapter) {
 
         Bundle args = new Bundle();
         AddTaskFragment fragment = new AddTaskFragment();
+        args.putSerializable(ARG_TAB_ADAPTER , taskAdapter);
+        args.putSerializable(ARG_TAB_STATE , tabState);
         fragment.setArguments(args);
         return fragment;
     }
@@ -61,12 +74,24 @@ public class AddTaskFragment extends DialogFragment {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        tabState = (State) getArguments().get(ARG_TAB_STATE);
+        taskAdapter = (TaskAdapter) getArguments().get(ARG_TAB_ADAPTER);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_add_task, container, false);
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        taskAdapter.notifyDataSetChanged();
     }
 
     @NonNull
@@ -109,6 +134,8 @@ public class AddTaskFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         addTask();
+                        taskAdapter.taskList = Repository.getInstance().getTaskList();
+                        taskAdapter.notifyDataSetChanged();
                     }
                 })
                 .setView(view)
@@ -129,6 +156,10 @@ public class AddTaskFragment extends DialogFragment {
         mTask.setDescription(descriptionEditText.getText().toString());
         mTask.setState(State.Todo);
         mTask.setDate(taskCalendar.getTime());
+        if(doneCheckBox.isChecked())
+            mTask.setState(State.Done);
+        else
+            mTask.setState(tabState);
         Repository.getInstance().addTask(mTask);
     }
 

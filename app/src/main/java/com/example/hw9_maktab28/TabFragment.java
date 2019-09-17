@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.hw9_maktab28.model.Repository;
 import com.example.hw9_maktab28.model.State;
@@ -60,16 +61,16 @@ public class TabFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                AddTaskFragment addTaskFragment = AddTaskFragment.newInstance();
+                AddTaskFragment addTaskFragment = AddTaskFragment.newInstance(tabState , taskAdapter);
 
                 addTaskFragment.setTargetFragment(TabFragment.this, 0);
 
                 addTaskFragment.show(getFragmentManager(), ADD_TASK_FRAGMENT_TAG);
             }
         });
-
         return view;
     }
+
 
     private void initUi(View view)
     {

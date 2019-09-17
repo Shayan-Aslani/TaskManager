@@ -12,15 +12,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hw9_maktab28.model.Task;
 
+import java.io.Serializable;
 import java.util.List;
 
 
-    public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
+    public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> implements Serializable {
 
         public static final String TASK_DETAIL_FRAGMENT_TAG = "TaskDetail";
 
 
-        private List<Task> taskList;
+        public List<Task> taskList;
         public static Fragment fragment;
 
         public TaskAdapter(List<Task> taskList , Fragment fragment)
