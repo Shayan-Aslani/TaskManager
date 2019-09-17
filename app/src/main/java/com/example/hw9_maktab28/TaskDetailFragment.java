@@ -113,7 +113,7 @@ public class TaskDetailFragment extends DialogFragment {
     private void getDetail(){
         titleEditText.setText(mTask.getTitle());
         descriptionEditText.setText(mTask.getDescription());
-        SimpleDateFormat date_format = new SimpleDateFormat("YYYY/mm/dd");
+        SimpleDateFormat date_format = new SimpleDateFormat("YYYY/MM/dd");
         dateButton.setText(date_format.format(mTask.getDate()));
         date_format = new SimpleDateFormat("HH:mm:ss");
         timeButton.setText(date_format.format(mTask.getDate().getTime()));

@@ -65,8 +65,6 @@ public class TabFragment extends Fragment {
                 addTaskFragment.setTargetFragment(TabFragment.this, 0);
 
                 addTaskFragment.show(getFragmentManager(), ADD_TASK_FRAGMENT_TAG);
-
-                taskAdapter.notifyDataSetChanged();
             }
         });
 
@@ -78,8 +76,6 @@ public class TabFragment extends Fragment {
         fab = view.findViewById(R.id.fab);
         taskRecyclerView = view.findViewById(R.id.task_recyclerView);
     }
-
-
 
 
 }

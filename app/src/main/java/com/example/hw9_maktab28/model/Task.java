@@ -10,11 +10,14 @@ public class Task {
         private State state;
         private UUID uuid;
 
+
     public Task(String title, String description , State state) {
         this.title = title;
         this.description = description;
         this.state = state;
-        this.date = new Date();
+        this.uuid = UUID.randomUUID();
+    }
+    public Task(){
         this.uuid = UUID.randomUUID();
     }
 
