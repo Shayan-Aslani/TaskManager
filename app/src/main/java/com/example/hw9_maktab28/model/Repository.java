@@ -40,4 +40,25 @@ public class Repository {
         }
         return stateTaskList;
     }
+
+    public void updateTask(Task task) throws Exception {
+        Task t = getTask(task.getId());
+        if (t == null)
+            throw new Exception("This task does not exist!!!");
+
+        t.setTitle(task.getTitle());
+        t.setDate(task.getDate());
+        t.setDescription(task.getDescription());
+        t.setState(task.getState());
+    }
+
+    public void deleteTask(Task task) throws Exception {
+        Task t = getTask(task.getId());
+        if (t == null)
+            throw new Exception("This task does not exist!!!");
+
+        taskList.remove(t);
+    }
+
+
 }

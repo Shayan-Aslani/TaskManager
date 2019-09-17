@@ -47,7 +47,6 @@ public class AddTaskFragment extends DialogFragment {
     private CheckBox doneCheckBox;
     Calendar taskCalendar = new GregorianCalendar();
 
-
     private Task mTask = new Task();
 
     public static AddTaskFragment newInstance() {
@@ -104,7 +103,6 @@ public class AddTaskFragment extends DialogFragment {
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
                     }
                 })
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {

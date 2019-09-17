@@ -1,8 +1,10 @@
 package com.example.hw9_maktab28;
 
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,7 +16,9 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.Toast;
 
 import com.example.hw9_maktab28.model.Repository;
 import com.example.hw9_maktab28.model.State;
@@ -23,7 +27,15 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.UUID;
+
+import static com.example.hw9_maktab28.AddTaskFragment.DATE_PICKER_FRAGMENT_TAG;
+import static com.example.hw9_maktab28.AddTaskFragment.REQUEST_CODE_DATE_PICKER;
+import static com.example.hw9_maktab28.AddTaskFragment.REQUEST_CODE_TIME_PICKER;
+import static com.example.hw9_maktab28.AddTaskFragment.TIME_PICKER_FRAGMENT_TAG;
 
 
 /**
@@ -39,6 +51,7 @@ public class TaskDetailFragment extends DialogFragment {
     private MaterialButton dateButton;
     private MaterialButton timeButton ;
     private CheckBox doneCheckBox;
+    Calendar taskCalendar = new GregorianCalendar();
 
     public static TaskDetailFragment newInstance(UUID uuid) {
 
@@ -78,27 +91,83 @@ public class TaskDetailFragment extends DialogFragment {
         initUi(view);
         getDetail();
 
+        dateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DatePickerFragment datePickerFragment = DatePickerFragment.newInstance(new Date());
+                datePickerFragment.setTargetFragment(TaskDetailFragment.this, REQUEST_CODE_DATE_PICKER);
+                datePickerFragment.show(getFragmentManager(), DATE_PICKER_FRAGMENT_TAG);
+            }
+        });
 
-        return new AlertDialog.Builder(getActivity())
+        timeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                TimePickerFragment timePickerFragment = TimePickerFragment.newInstance(new Date());
+                timePickerFragment.setTargetFragment(TaskDetailFragment.this , REQUEST_CODE_TIME_PICKER);
+                timePickerFragment.show(getFragmentManager() , TIME_PICKER_FRAGMENT_TAG);
+            }
+        });
+
+        final Dialog dialog = new AlertDialog.Builder(getActivity())
                 .setNeutralButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i){
+                        deleteTask();
+                        Toast.makeText(getActivity(), "task Deleted !!", Toast.LENGTH_SHORT).show();
                     }
                 })
-                .setNegativeButton("Edit", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                    }
-                })
+                .setNegativeButton("Edit", null)
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        editTask();
                     }
                 })
                 .setView(view)
                 .create();
+
+
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                Button okButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_NEGATIVE);
+                okButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        setViewEditable(true);
+                    }
+                });
+            }
+        });
+
+
+        return dialog;
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != Activity.RESULT_OK || data == null)
+            return;
+
+        if (requestCode == REQUEST_CODE_DATE_PICKER) {
+            Date date = (Date) data.getSerializableExtra(DatePickerFragment.getExtraTaskDate());
+            SimpleDateFormat date_format = new SimpleDateFormat("YYYY/MM/dd");
+            dateButton.setText(date_format.format(date));
+            taskCalendar.setTime(date);
+        }
+        else if (requestCode == REQUEST_CODE_TIME_PICKER) {
+            Date date = (Date) data.getSerializableExtra(TimePickerFragment.getExtraTaskTime());
+            Calendar cal2 = new GregorianCalendar();
+            cal2.setTime(date);
+            SimpleDateFormat date_format = new SimpleDateFormat("HH:mm:ss");
+            timeButton.setText(date_format.format(cal2.getTime()));
+
+            taskCalendar.set(taskCalendar.get(Calendar.YEAR) , taskCalendar.get(Calendar.MONTH) , taskCalendar.get(Calendar.DAY_OF_MONTH ), cal2.get(Calendar.HOUR_OF_DAY) , cal2.get(Calendar.MINUTE));
+        }
+
+    }
+
 
 
     private void initUi(View view)
@@ -118,6 +187,33 @@ public class TaskDetailFragment extends DialogFragment {
         date_format = new SimpleDateFormat("HH:mm:ss");
         timeButton.setText(date_format.format(mTask.getDate().getTime()));
         doneCheckBox.setChecked(mTask.getState().equals(State.Done));
+    }
+
+    private void setViewEditable(boolean enabled){
+        titleEditText.setEnabled(enabled);
+        descriptionEditText.setEnabled(enabled);
+        dateButton.setEnabled(enabled);
+        timeButton.setEnabled(enabled);
+        doneCheckBox.setEnabled(enabled);
+    }
+
+    private void editTask(){
+        mTask.setTitle(titleEditText.getText().toString());
+        mTask.setDescription(descriptionEditText.getText().toString());
+        mTask.setDate(taskCalendar.getTime());
+        try {
+            Repository.getInstance().updateTask(mTask);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void deleteTask(){
+        try {
+            Repository.getInstance().deleteTask(mTask);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
