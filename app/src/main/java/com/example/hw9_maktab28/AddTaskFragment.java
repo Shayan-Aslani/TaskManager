@@ -91,6 +91,7 @@ public class AddTaskFragment extends DialogFragment {
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
+        taskAdapter.taskList = Repository.getInstance().getTaskList();
         taskAdapter.notifyDataSetChanged();
     }
 
@@ -134,8 +135,7 @@ public class AddTaskFragment extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         addTask();
-                        taskAdapter.taskList = Repository.getInstance().getTaskList();
-                        taskAdapter.notifyDataSetChanged();
+
                     }
                 })
                 .setView(view)

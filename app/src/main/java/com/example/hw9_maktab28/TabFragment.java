@@ -52,10 +52,13 @@ public class TabFragment extends Fragment {
 
         taskRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         list = Repository.getInstance().getStateTaskList(tabState);
-        taskAdapter = new TaskAdapter(list , this);
+        taskAdapter = new TaskAdapter(list , this , taskRecyclerView);
         taskRecyclerView.setAdapter(taskAdapter);
         if(list.size() == 0)
             taskRecyclerView.setBackgroundColor(Color.BLUE);
+        else
+            taskRecyclerView.setBackgroundColor(Color.WHITE);
+
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,6 +1,7 @@
 package com.example.hw9_maktab28;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -23,11 +24,13 @@ import java.util.List;
 
         public List<Task> taskList;
         public static Fragment fragment;
+        private RecyclerView recyclerView;
 
-        public TaskAdapter(List<Task> taskList , Fragment fragment)
+        public TaskAdapter(List<Task> taskList , Fragment fragment , RecyclerView recyclerView)
         {
             this.taskList = taskList;
             this.fragment = fragment;
+            this.recyclerView = recyclerView;
         }
 
         @NonNull
@@ -45,12 +48,17 @@ import java.util.List;
         }
 
         @Override
-        public int getItemCount() {
+        public int getItemCount()
+        {
+            if(taskList.size()> 0 )
+                recyclerView.setBackgroundColor(Color.WHITE);
+            else
+                recyclerView.setBackgroundColor(Color.BLUE);
             return taskList == null ? 0 : taskList.size();
         }
 
 
-        public static class TaskViewHolder extends RecyclerView.ViewHolder
+        public class TaskViewHolder extends RecyclerView.ViewHolder
         {
             private TextView taskNameTextView ;
             private TextView taskStateTextView;
@@ -75,7 +83,7 @@ import java.util.List;
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        TaskDetailFragment taskDetailFragment = TaskDetailFragment.newInstance(task.getId());
+                        TaskDetailFragment taskDetailFragment = TaskDetailFragment.newInstance(task.getId() , TaskAdapter.this);
 
                         taskDetailFragment.setTargetFragment(fragment , 0);
 
@@ -93,6 +101,8 @@ import java.util.List;
                 numberTextView.setText("Number : " + (getAdapterPosition()+1));
             }
         }
+
+
     }
 
 

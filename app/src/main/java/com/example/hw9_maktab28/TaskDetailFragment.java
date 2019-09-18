@@ -32,6 +32,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.UUID;
 
+import static com.example.hw9_maktab28.AddTaskFragment.ARG_TAB_ADAPTER;
 import static com.example.hw9_maktab28.AddTaskFragment.DATE_PICKER_FRAGMENT_TAG;
 import static com.example.hw9_maktab28.AddTaskFragment.REQUEST_CODE_DATE_PICKER;
 import static com.example.hw9_maktab28.AddTaskFragment.REQUEST_CODE_TIME_PICKER;
@@ -51,12 +52,14 @@ public class TaskDetailFragment extends DialogFragment {
     private MaterialButton dateButton;
     private MaterialButton timeButton ;
     private CheckBox doneCheckBox;
+    private TaskAdapter taskAdapter;
     Calendar taskCalendar = new GregorianCalendar();
 
-    public static TaskDetailFragment newInstance(UUID uuid) {
+    public static TaskDetailFragment newInstance(UUID uuid , TaskAdapter taskAdapter) {
 
         Bundle args = new Bundle();
         args.putSerializable(ARG_TASK_ID , uuid);
+        args.putSerializable(ARG_TAB_ADAPTER , taskAdapter);
         TaskDetailFragment fragment = new TaskDetailFragment();
         fragment.setArguments(args);
         return fragment;
@@ -67,10 +70,19 @@ public class TaskDetailFragment extends DialogFragment {
     }
 
     @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        taskAdapter.taskList = Repository.getInstance().getTaskList();
+        taskAdapter.notifyDataSetChanged();
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         mTask = Repository.getInstance().getTask((UUID)getArguments().getSerializable(ARG_TASK_ID));
+
+        taskAdapter = (TaskAdapter) getArguments().get(ARG_TAB_ADAPTER);
 
     }
 
