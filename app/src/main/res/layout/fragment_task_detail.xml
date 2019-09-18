@@ -45,7 +45,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/date_Button_Add"
+        android:id="@+id/signup_Button_signupFragment"
         android:layout_width="272dp"
         android:layout_height="46dp"
         android:layout_margin="16dp"
@@ -55,14 +55,14 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/time_Button_Add"
+        android:id="@+id/signup_Button_loginFragment"
         android:layout_width="272dp"
         android:layout_height="46dp"
         android:enabled="false"
-        app:layout_constraintEnd_toEndOf="@+id/date_Button_Add"
+        app:layout_constraintEnd_toEndOf="@+id/signup_Button_signupFragment"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/date_Button_Add"
-        app:layout_constraintTop_toBottomOf="@+id/date_Button_Add" />
+        app:layout_constraintStart_toStartOf="@+id/signup_Button_signupFragment"
+        app:layout_constraintTop_toBottomOf="@+id/signup_Button_signupFragment" />
 
     <androidx.appcompat.widget.AppCompatCheckBox
         android:id="@+id/done_CheckBox_Add"
@@ -72,6 +72,6 @@
         android:enabled="false"
         android:text="Done"
         app:layout_constraintStart_toStartOf="@+id/textInputLayout2"
-        app:layout_constraintTop_toBottomOf="@+id/time_Button_Add" />
+        app:layout_constraintTop_toBottomOf="@+id/signup_Button_loginFragment" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

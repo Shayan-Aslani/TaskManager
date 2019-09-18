@@ -22,15 +22,20 @@ import java.util.List;
         public static final String TASK_DETAIL_FRAGMENT_TAG = "TaskDetail";
 
 
-        public List<Task> taskList;
+        private List<Task> taskList;
         public static Fragment fragment;
         private RecyclerView recyclerView;
 
-        public TaskAdapter(List<Task> taskList , Fragment fragment , RecyclerView recyclerView)
+        public TaskAdapter(List<Task> taskList , Fragment fragment , RecyclerView recyclerView )
         {
             this.taskList = taskList;
             this.fragment = fragment;
             this.recyclerView = recyclerView;
+        }
+
+        public void updateList(List newList){
+            taskList = newList;
+            this.notifyDataSetChanged();
         }
 
         @NonNull
@@ -63,6 +68,7 @@ import java.util.List;
             private TextView taskNameTextView ;
             private TextView taskStateTextView;
             private TextView numberTextView;
+            private TextView letterTextView;
 
 
             public TaskViewHolder(@NonNull final View itemView) {
@@ -72,6 +78,7 @@ import java.util.List;
                 taskNameTextView = itemView.findViewById(R.id.taskName_textView);
                 taskStateTextView = itemView.findViewById(R.id.taskState_textView);
                 numberTextView = itemView.findViewById(R.id.number_textView);
+                letterTextView = itemView.findViewById(R.id.letter_TextView);
 
             }
 
@@ -83,7 +90,7 @@ import java.util.List;
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        TaskDetailFragment taskDetailFragment = TaskDetailFragment.newInstance(task.getId() , TaskAdapter.this);
+                        TaskDetailFragment taskDetailFragment = TaskDetailFragment.newInstance(task.getId() , TaskAdapter.this , task.getState());
 
                         taskDetailFragment.setTargetFragment(fragment , 0);
 
@@ -99,8 +106,11 @@ import java.util.List;
                 taskNameTextView.setText("Task Name : " + task.getTitle());
                 taskStateTextView.setText("State : " + task.getState().toString());
                 numberTextView.setText("Number : " + (getAdapterPosition()+1));
+                letterTextView.setText(String.valueOf(task.getTitle().charAt(0)));
             }
         }
+
+
 
 
     }

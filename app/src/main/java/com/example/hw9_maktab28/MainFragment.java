@@ -14,17 +14,37 @@ import android.view.ViewGroup;
 
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.UUID;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class MainFragment extends Fragment {
 
+    public static final String ARG_USERID = "userId";
+
+    private UUID userId;
+
+    public static MainFragment newInstance(UUID userId) {
+
+        Bundle args = new Bundle();
+        args.putSerializable(ARG_USERID , userId);
+        MainFragment fragment = new MainFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
 
     public MainFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        userId = (UUID) getArguments().getSerializable(ARG_USERID);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

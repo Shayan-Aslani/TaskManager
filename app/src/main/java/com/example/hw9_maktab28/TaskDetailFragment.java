@@ -33,6 +33,7 @@ import java.util.GregorianCalendar;
 import java.util.UUID;
 
 import static com.example.hw9_maktab28.AddTaskFragment.ARG_TAB_ADAPTER;
+import static com.example.hw9_maktab28.AddTaskFragment.ARG_TAB_STATE;
 import static com.example.hw9_maktab28.AddTaskFragment.DATE_PICKER_FRAGMENT_TAG;
 import static com.example.hw9_maktab28.AddTaskFragment.REQUEST_CODE_DATE_PICKER;
 import static com.example.hw9_maktab28.AddTaskFragment.REQUEST_CODE_TIME_PICKER;
@@ -53,13 +54,15 @@ public class TaskDetailFragment extends DialogFragment {
     private MaterialButton timeButton ;
     private CheckBox doneCheckBox;
     private TaskAdapter taskAdapter;
+    private State tabState;
     Calendar taskCalendar = new GregorianCalendar();
 
-    public static TaskDetailFragment newInstance(UUID uuid , TaskAdapter taskAdapter) {
+    public static TaskDetailFragment newInstance(UUID uuid , TaskAdapter taskAdapter , State tabState) {
 
         Bundle args = new Bundle();
         args.putSerializable(ARG_TASK_ID , uuid);
         args.putSerializable(ARG_TAB_ADAPTER , taskAdapter);
+        args.putSerializable(ARG_TAB_STATE , tabState);
         TaskDetailFragment fragment = new TaskDetailFragment();
         fragment.setArguments(args);
         return fragment;
@@ -72,8 +75,8 @@ public class TaskDetailFragment extends DialogFragment {
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        taskAdapter.taskList = Repository.getInstance().getTaskList();
-        taskAdapter.notifyDataSetChanged();
+        taskAdapter.updateList(Repository.getInstance().getUserStateTaskList(tabState , Repository.getInstance().getLoginedUser().getUserId()));
+
     }
 
     @Override
@@ -83,6 +86,8 @@ public class TaskDetailFragment extends DialogFragment {
         mTask = Repository.getInstance().getTask((UUID)getArguments().getSerializable(ARG_TASK_ID));
 
         taskAdapter = (TaskAdapter) getArguments().get(ARG_TAB_ADAPTER);
+
+        tabState = (State) getArguments().get(ARG_TAB_STATE);
 
     }
 
@@ -186,8 +191,8 @@ public class TaskDetailFragment extends DialogFragment {
     {
         titleEditText = view.findViewById(R.id.title_editText_Detail);
         descriptionEditText = view.findViewById(R.id.description_editText_Detail);
-        dateButton = view.findViewById(R.id.date_Button_Add);
-        timeButton = view.findViewById(R.id.time_Button_Add) ;
+        dateButton = view.findViewById(R.id.signup_Button_signupFragment);
+        timeButton = view.findViewById(R.id.signup_Button_loginFragment) ;
         doneCheckBox = view.findViewById(R.id.done_CheckBox_Add) ;
     }
 

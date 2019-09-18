@@ -12,15 +12,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.CheckBox;
-import android.widget.Toast;
 
 import com.example.hw9_maktab28.model.Repository;
 import com.example.hw9_maktab28.model.State;
@@ -28,7 +24,6 @@ import com.example.hw9_maktab28.model.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -91,8 +86,7 @@ public class AddTaskFragment extends DialogFragment {
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        taskAdapter.taskList = Repository.getInstance().getTaskList();
-        taskAdapter.notifyDataSetChanged();
+        taskAdapter.updateList(Repository.getInstance().getUserStateTaskList(tabState , Repository.getInstance().getLoginedUser().getUserId()));
     }
 
     @NonNull
@@ -144,10 +138,10 @@ public class AddTaskFragment extends DialogFragment {
 
     private void initUi(View view)
     {
-        titleEditText = view.findViewById(R.id.title_EditText_Add);
-        descriptionEditText = view.findViewById(R.id.description_EditText_Add);
-        dateButton = view.findViewById(R.id.date_Button_Add);
-        timeButton = view.findViewById(R.id.time_Button_Add) ;
+        titleEditText = view.findViewById(R.id.username_EditText_signup);
+        descriptionEditText = view.findViewById(R.id.password_EditText_signup);
+        dateButton = view.findViewById(R.id.signup_Button_signupFragment);
+        timeButton = view.findViewById(R.id.signup_Button_loginFragment) ;
         doneCheckBox = view.findViewById(R.id.done_CheckBox_Add) ;
     }
 

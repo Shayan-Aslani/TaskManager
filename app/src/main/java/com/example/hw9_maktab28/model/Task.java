@@ -9,13 +9,15 @@ public class Task {
         private Date date;
         private State state;
         private UUID uuid;
+        private UUID userID ;
 
 
-    public Task(String title, String description , State state) {
+    public Task(String title, String description , State state , UUID userID) {
         this.title = title;
         this.description = description;
         this.state = state;
         this.uuid = UUID.randomUUID();
+        this.userID = userID;
     }
     public Task(){
         this.uuid = UUID.randomUUID();
@@ -53,6 +55,13 @@ public class Task {
         this.description = description;
     }
 
+    public UUID getUserID() {
+        return userID;
+    }
+
+    public void setUserID(UUID userID){
+        this.userID = userID;
+    }
     public State getState() {
         return state;
     }
