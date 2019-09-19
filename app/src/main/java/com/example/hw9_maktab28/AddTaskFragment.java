@@ -5,6 +5,9 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,7 +19,11 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.hw9_maktab28.model.Repository;
 import com.example.hw9_maktab28.model.State;
@@ -46,17 +53,15 @@ public class AddTaskFragment extends DialogFragment {
     private TextInputEditText descriptionEditText ;
     private MaterialButton dateButton;
     private MaterialButton timeButton ;
-    private CheckBox doneCheckBox;
+    private SeekBar stateSeekbar;
     private State tabState;
     private TaskAdapter taskAdapter;
+    private TextView todoSeekBarTxtView , doingseekBarTxtView , doneseekBarTxtView ;
     Calendar taskCalendar = new GregorianCalendar();
 
     private Task mTask = new Task();
 
-
-
     public static AddTaskFragment newInstance(State tabState , TaskAdapter taskAdapter) {
-
         Bundle args = new Bundle();
         AddTaskFragment fragment = new AddTaskFragment();
         args.putSerializable(ARG_TAB_ADAPTER , taskAdapter);
@@ -97,15 +102,13 @@ public class AddTaskFragment extends DialogFragment {
                 .inflate(R.layout.fragment_add_task, null, false);
 
         initUi(view);
+        setSeekbarState(tabState);
 
         dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DatePickerFragment datePickerFragment = DatePickerFragment.newInstance(new Date());
-
-                //create parent-child between CrimeDetailFragment and DatePickerFragment
                 datePickerFragment.setTargetFragment(AddTaskFragment.this, REQUEST_CODE_DATE_PICKER);
-
                 datePickerFragment.show(getFragmentManager(), DATE_PICKER_FRAGMENT_TAG);
             }
         });
@@ -119,41 +122,81 @@ public class AddTaskFragment extends DialogFragment {
             }
         });
 
-        return new AlertDialog.Builder(getActivity())
+        stateSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) { }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                todoSeekBarTxtView.setTypeface(null , Typeface.NORMAL);
+                doingseekBarTxtView.setTypeface(null , Typeface.NORMAL);
+                doneseekBarTxtView.setTypeface(null , Typeface.NORMAL);
+            }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                switch (seekBar.getProgress())
+                {
+                    case 0:
+                        todoSeekBarTxtView.setTypeface(null, Typeface.BOLD);
+                        break;
+                    case 1:
+                        doingseekBarTxtView.setTypeface(null, Typeface.BOLD);
+                        break;
+                    case 2:
+                        doneseekBarTxtView.setTypeface(null , Typeface.BOLD);
+                        break;
+                }
+            }
+        });
+
+
+        final AlertDialog addDialog = new AlertDialog.Builder(getActivity())
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                     }
                 })
-                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        addTask();
-
-                    }
-                })
+                .setPositiveButton("Save" , null)
                 .setView(view)
                 .create();
+
+        addDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                Button okButton = ((AlertDialog) addDialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                okButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(checkInputs())
+                        {
+                            addTask();
+                            dismiss();
+                        }
+                    }
+                });
+            }
+        });
+
+        return addDialog;
     }
 
     private void initUi(View view)
     {
-        titleEditText = view.findViewById(R.id.username_EditText_signup);
-        descriptionEditText = view.findViewById(R.id.password_EditText_signup);
-        dateButton = view.findViewById(R.id.signup_Button_signupFragment);
-        timeButton = view.findViewById(R.id.signup_Button_loginFragment) ;
-        doneCheckBox = view.findViewById(R.id.done_CheckBox_Add) ;
+        titleEditText = view.findViewById(R.id.title_EditText_Add);
+        descriptionEditText = view.findViewById(R.id.description_editText_Add);
+        dateButton = view.findViewById(R.id.dateSet_Button_Add);
+        timeButton = view.findViewById(R.id.timeSet_Button_Add) ;
+        stateSeekbar = view.findViewById(R.id.taskstate_seekBar);
+        todoSeekBarTxtView = view.findViewById(R.id.todo_SeekBar_TextView);
+        doingseekBarTxtView = view.findViewById(R.id.doing_SeekBar_TextView);
+        doneseekBarTxtView = view.findViewById(R.id.done_SeekBar_TextView);
     }
 
     private void addTask(){
+
         mTask.setTitle(titleEditText.getText().toString());
         mTask.setDescription(descriptionEditText.getText().toString());
-        mTask.setState(State.Todo);
         mTask.setDate(taskCalendar.getTime());
-        if(doneCheckBox.isChecked())
-            mTask.setState(State.Done);
-        else
-            mTask.setState(tabState);
+        mTask.setState(getSeekbarState());
         Repository.getInstance().addTask(mTask);
     }
 
@@ -174,9 +217,46 @@ public class AddTaskFragment extends DialogFragment {
             cal2.setTime(date);
             SimpleDateFormat date_format = new SimpleDateFormat("HH:mm:ss");
             timeButton.setText(date_format.format(cal2.getTime()));
-
             taskCalendar.set(taskCalendar.get(Calendar.YEAR) , taskCalendar.get(Calendar.MONTH) , taskCalendar.get(Calendar.DAY_OF_MONTH ), cal2.get(Calendar.HOUR_OF_DAY) , cal2.get(Calendar.MINUTE));
         }
+
+    }
+
+
+    private void setSeekbarState(State state){
+        switch (state)
+        {
+            case Todo:
+                stateSeekbar.setProgress(0);
+                break;
+            case Doing:
+                stateSeekbar.setProgress(1);
+                break;
+            case Done:
+                stateSeekbar.setProgress(2);
+                break;
+        }
+    }
+
+    private State getSeekbarState(){
+        switch (stateSeekbar.getProgress())
+        {
+            case 0:
+                return State.Todo;
+            case 1 :
+                return State.Doing;
+            case 2:
+                return State.Done;
+        }
+        return null;
+    }
+
+    private boolean checkInputs(){
+        if(titleEditText.getText().toString().isEmpty()){
+            Toast.makeText(getActivity(), "Please input Title !", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
 
     }
 

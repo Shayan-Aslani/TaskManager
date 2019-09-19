@@ -72,6 +72,7 @@ public class TabFragment extends Fragment {
     }
 
 
+
     private void initUi(View view)
     {
         fab = view.findViewById(R.id.fab);

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,10 +15,13 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.hw9_maktab28.model.Repository;
@@ -52,9 +56,10 @@ public class TaskDetailFragment extends DialogFragment {
     private TextInputEditText descriptionEditText ;
     private MaterialButton dateButton;
     private MaterialButton timeButton ;
-    private CheckBox doneCheckBox;
     private TaskAdapter taskAdapter;
     private State tabState;
+    private SeekBar stateSeekbar;
+    private TextView todoSeekBarTxtView , doingseekBarTxtView , doneseekBarTxtView ;
     Calendar taskCalendar = new GregorianCalendar();
 
     public static TaskDetailFragment newInstance(UUID uuid , TaskAdapter taskAdapter , State tabState) {
@@ -76,7 +81,6 @@ public class TaskDetailFragment extends DialogFragment {
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
         taskAdapter.updateList(Repository.getInstance().getUserStateTaskList(tabState , Repository.getInstance().getLoginedUser().getUserId()));
-
     }
 
     @Override
@@ -84,11 +88,8 @@ public class TaskDetailFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
 
         mTask = Repository.getInstance().getTask((UUID)getArguments().getSerializable(ARG_TASK_ID));
-
         taskAdapter = (TaskAdapter) getArguments().get(ARG_TAB_ADAPTER);
-
         tabState = (State) getArguments().get(ARG_TAB_STATE);
-
     }
 
     @Override
@@ -107,6 +108,7 @@ public class TaskDetailFragment extends DialogFragment {
                 .inflate(R.layout.fragment_task_detail, null, false);
         initUi(view);
         getDetail();
+        setViewEditable(false);
 
         dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,14 +128,35 @@ public class TaskDetailFragment extends DialogFragment {
             }
         });
 
-        final Dialog dialog = new AlertDialog.Builder(getActivity())
-                .setNeutralButton("Delete", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i){
-                        deleteTask();
-                        Toast.makeText(getActivity(), "task Deleted !!", Toast.LENGTH_SHORT).show();
-                    }
-                })
+        stateSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) { }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                todoSeekBarTxtView.setTypeface(null , Typeface.NORMAL);
+                doingseekBarTxtView.setTypeface(null , Typeface.NORMAL);
+                doneseekBarTxtView.setTypeface(null , Typeface.NORMAL);
+            }
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                switch (seekBar.getProgress())
+                {
+                    case 0:
+                        todoSeekBarTxtView.setTypeface(null, Typeface.BOLD);
+                        break;
+                    case 1:
+                        doingseekBarTxtView.setTypeface(null, Typeface.BOLD);
+                        break;
+                    case 2:
+                        doneseekBarTxtView.setTypeface(null , Typeface.BOLD);
+                        break;
+                }
+            }
+        });
+
+
+        final Dialog detailDialog = new AlertDialog.Builder(getActivity())
+                .setNeutralButton("Delete", null)
                 .setNegativeButton("Edit", null)
                 .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                     @Override
@@ -145,21 +168,40 @@ public class TaskDetailFragment extends DialogFragment {
                 .create();
 
 
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+        detailDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialogInterface) {
-                Button okButton = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_NEGATIVE);
-                okButton.setOnClickListener(new View.OnClickListener() {
+                Button editButton = ((AlertDialog) detailDialog).getButton(AlertDialog.BUTTON_NEGATIVE);
+                editButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         setViewEditable(true);
                     }
                 });
+
+                Button deleteButton = ((AlertDialog) detailDialog).getButton(AlertDialog.BUTTON_NEUTRAL);
+                deleteButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        new android.app.AlertDialog.Builder(getContext())
+                                .setTitle("Delete Task ?")
+                                .setCancelable(false)
+                                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        deleteTask();
+                                        detailDialog.dismiss();
+                                        Toast.makeText(getActivity(), "task Deleted !!", Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.cancel , null)
+                                .create()
+                                .show();
+                    }
+                });
             }
         });
-
-
-        return dialog;
+        return detailDialog;
     }
 
     @Override
@@ -186,14 +228,16 @@ public class TaskDetailFragment extends DialogFragment {
     }
 
 
-
     private void initUi(View view)
     {
         titleEditText = view.findViewById(R.id.title_editText_Detail);
         descriptionEditText = view.findViewById(R.id.description_editText_Detail);
-        dateButton = view.findViewById(R.id.signup_Button_signupFragment);
-        timeButton = view.findViewById(R.id.signup_Button_loginFragment) ;
-        doneCheckBox = view.findViewById(R.id.done_CheckBox_Add) ;
+        dateButton = view.findViewById(R.id.date_Button_Detail);
+        timeButton = view.findViewById(R.id.time_Button_Detail) ;
+        stateSeekbar = view.findViewById(R.id.taskstate_seekBar_Detail);
+        todoSeekBarTxtView = view.findViewById(R.id.todo_SeekBar_TextView_Detail);
+        doingseekBarTxtView = view.findViewById(R.id.doing_SeekBar_TextView_Detail);
+        doneseekBarTxtView = view.findViewById(R.id.done_SeekBar_TextView_Detail);
     }
 
     private void getDetail(){
@@ -203,21 +247,27 @@ public class TaskDetailFragment extends DialogFragment {
         dateButton.setText(date_format.format(mTask.getDate()));
         date_format = new SimpleDateFormat("HH:mm:ss");
         timeButton.setText(date_format.format(mTask.getDate().getTime()));
-        doneCheckBox.setChecked(mTask.getState().equals(State.Done));
+        setSeekbarState(mTask.getState());
     }
 
-    private void setViewEditable(boolean enabled){
+    private void setViewEditable(final boolean enabled){
         titleEditText.setEnabled(enabled);
         descriptionEditText.setEnabled(enabled);
         dateButton.setEnabled(enabled);
         timeButton.setEnabled(enabled);
-        doneCheckBox.setEnabled(enabled);
+        stateSeekbar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return !enabled;
+            }
+        });
     }
 
     private void editTask(){
         mTask.setTitle(titleEditText.getText().toString());
         mTask.setDescription(descriptionEditText.getText().toString());
         mTask.setDate(taskCalendar.getTime());
+        mTask.setState(getSeekbarState());
         try {
             Repository.getInstance().updateTask(mTask);
         } catch (Exception e) {
@@ -232,5 +282,38 @@ public class TaskDetailFragment extends DialogFragment {
             e.printStackTrace();
         }
     }
+
+
+
+    public void setSeekbarState(State state){
+        switch (state)
+        {
+            case Todo:
+                stateSeekbar.setProgress(0);
+                break;
+            case Doing:
+                stateSeekbar.setProgress(1);
+                break;
+            case Done:
+                stateSeekbar.setProgress(2);
+                break;
+        }
+    }
+
+
+    public State getSeekbarState(){
+        switch (stateSeekbar.getProgress())
+        {
+            case 0:
+                return State.Todo;
+            case 1 :
+                return State.Doing;
+            case 2:
+                return State.Done;
+        }
+        return null;
+    }
+
+
 
 }

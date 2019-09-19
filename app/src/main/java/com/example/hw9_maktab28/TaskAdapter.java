@@ -73,8 +73,6 @@ import java.util.List;
 
             public TaskViewHolder(@NonNull final View itemView) {
                 super(itemView);
-
-
                 taskNameTextView = itemView.findViewById(R.id.taskName_textView);
                 taskStateTextView = itemView.findViewById(R.id.taskState_textView);
                 numberTextView = itemView.findViewById(R.id.number_textView);
@@ -91,9 +89,7 @@ import java.util.List;
                     @Override
                     public void onClick(View view) {
                         TaskDetailFragment taskDetailFragment = TaskDetailFragment.newInstance(task.getId() , TaskAdapter.this , task.getState());
-
                         taskDetailFragment.setTargetFragment(fragment , 0);
-
                         taskDetailFragment.show(fragment.getFragmentManager() , TASK_DETAIL_FRAGMENT_TAG);
                     }
                 });

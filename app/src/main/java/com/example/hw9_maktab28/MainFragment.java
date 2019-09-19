@@ -44,6 +44,7 @@ public class MainFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userId = (UUID) getArguments().getSerializable(ARG_USERID);
+
     }
 
     @Override
