@@ -1,8 +1,7 @@
-package com.example.hw9_maktab28;
+package com.example.hw9_maktab28.mainController;
 
 import android.app.Activity;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -11,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.hw9_maktab28.R;
 import com.example.hw9_maktab28.model.Task;
 
 import java.io.Serializable;
@@ -93,9 +93,9 @@ import java.util.List;
                 });
 
                 if(getAdapterPosition()% 2 == 0)
-                    itemView.setBackgroundColor(0xFFEC407A);
+                    itemView.setBackgroundColor(0xFFBEC2FF);
                 else
-                    itemView.setBackgroundColor(0xFFF5B9CD);
+                    itemView.setBackgroundColor(0x804250B2);
 
                 taskNameTextView.setText("Task Name : " + task.getTitle());
                 taskStateTextView.setText("State : " + task.getState().toString());

@@ -1,22 +1,25 @@
-package com.example.hw9_maktab28;
+package com.example.hw9_maktab28.mainController;
 
 
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.DatePicker;
+import android.widget.TimePicker;
+
+import com.example.hw9_maktab28.R;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -26,60 +29,58 @@ import java.util.GregorianCalendar;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DatePickerFragment extends DialogFragment {
+public class TimePickerFragment extends DialogFragment {
 
-    private static final String ARG_TASK_DATE = "TaskDate";
-    private static final String EXTRA_TASK_DATE = "com.example.hw9_maktab28.TaskDate";
+
+    private static final String ARG_TASK_TIME = "taskTime";
+    private static final String EXTRA_TASK_TIME = "com.example.hw9_maktab28.taskTime";
+
+
     private Date mDate;
-    private DatePicker mDatePicker;
+    private TimePicker mTimePicker;
 
-    public static String getExtraTaskDate() {
-        return EXTRA_TASK_DATE;
+    public static String getExtraTaskTime() {
+        return EXTRA_TASK_TIME;
     }
 
-    public static DatePickerFragment newInstance(Date date) {
+    public static TimePickerFragment newInstance(Date date) {
 
         Bundle args = new Bundle();
-        args.putSerializable(ARG_TASK_DATE, date);
-
-        DatePickerFragment fragment = new DatePickerFragment();
+        args.putSerializable(ARG_TASK_TIME, date);
+        TimePickerFragment fragment = new TimePickerFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
-    public DatePickerFragment() {
+    public TimePickerFragment() {
         // Required empty public constructor
     }
+
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mDate = (Date) getArguments().getSerializable(ARG_TASK_DATE);
+        mDate = (Date) getArguments().getSerializable(ARG_TASK_TIME);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_date_picker, container, false);
-    }
+
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getActivity())
-                .inflate(R.layout.fragment_date_picker, null, false);
+                .inflate(R.layout.fragment_time_picker, null, false);
 
-        mDatePicker = view.findViewById(R.id.datepicker);
-
-        initDatePicker();
-
+        mTimePicker = view.findViewById(R.id.timepicker);
+        initTimePicker();
         return new AlertDialog.Builder(getActivity())
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.M)
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Date date = extractDate();
+                        Date date = extractTime();
                         sendResult(date);
                     }
                 })
@@ -87,28 +88,26 @@ public class DatePickerFragment extends DialogFragment {
                 .create();
     }
 
-    private Date extractDate() {
-        int year = mDatePicker.getYear();
-        int monthOfYear = mDatePicker.getMonth();
-        int dayOfMonth = mDatePicker.getDayOfMonth();
-
-        GregorianCalendar calendar = new GregorianCalendar(year, monthOfYear, dayOfMonth);
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private Date extractTime() {
+        int hour = mTimePicker.getHour();
+        int minute = mTimePicker.getMinute();
+        GregorianCalendar calendar = new GregorianCalendar(0, 0,0 , hour, minute);
         return calendar.getTime();
     }
 
-    private void initDatePicker() {
+    private void initTimePicker() {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(mDate);
-        int year = calendar.get(Calendar.YEAR);
-        int monthOfYear = calendar.get(Calendar.MONTH);
-        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-        mDatePicker.init(year, monthOfYear, dayOfMonth, null);
     }
 
     private void sendResult(Date date) {
         Fragment fragment = getTargetFragment();
+
         Intent intent = new Intent();
-        intent.putExtra(EXTRA_TASK_DATE, date);
+        intent.putExtra(EXTRA_TASK_TIME, date);
         fragment.onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, intent);
     }
+
+
 }

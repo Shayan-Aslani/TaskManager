@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TabFragment"
+    tools:context=".mainController.TabFragment"
     style="@style/Theme.AppCompat.Light.NoActionBar"
     android:id="@+id/tab_Todo">
 

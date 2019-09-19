@@ -1,7 +1,6 @@
-package com.example.hw9_maktab28;
+package com.example.hw9_maktab28.LoginController;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.hw9_maktab28.R;
 import com.example.hw9_maktab28.model.Repository;
 import com.example.hw9_maktab28.model.User;
 import com.google.android.material.button.MaterialButton;
@@ -59,16 +59,13 @@ public class SignupFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                if(passwordEditText.getText().length() == 0 || usernameEditText.length() == 0)
+
+                String username =  usernameEditText.getText().toString();
+                String password = passwordEditText.getText().toString();
+                if(signupCheck(username ,  password))
                 {
-                    Toast.makeText(getActivity(), "Invalid Username or Password !!!!", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    String username =  usernameEditText.getText().toString();
-                    String password = passwordEditText.getText().toString();
-
                     Repository.getInstance().addUser(new User(username,password));
-
+                    Toast.makeText(getActivity(), "SignUp Succesfully !", Toast.LENGTH_SHORT).show();
                     getActivity().finish();
                 }
             }
@@ -82,5 +79,22 @@ public class SignupFragment extends Fragment {
         signupButton = view.findViewById(R.id.signup_Button_signupFragment);
     }
 
+    private boolean signupCheck(String username , String password)
+    {
+        for(User user : Repository.getInstance().getUserList()) {
+            if (user.getUsername().equals(username)) {
+                Toast.makeText(getActivity(), "Invalid Username !", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
+
+        if(username.length() == 0 || password.length() == 0)
+        {
+            Toast.makeText(getActivity(), "Invalid Username or Password !!!!", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
+    }
 
 }

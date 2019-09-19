@@ -8,6 +8,22 @@ public class User {
     private String password;
     private UUID userId;
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public User(String username, String password) {
         this.username = username;
         this.password = password;
@@ -24,4 +40,6 @@ public class User {
         User user = (User) o;
         return username.equals( user.username) && password.equals(user.password);
     }
+
+
 }

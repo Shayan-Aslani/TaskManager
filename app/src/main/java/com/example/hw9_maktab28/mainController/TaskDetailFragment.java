@@ -1,4 +1,4 @@
-package com.example.hw9_maktab28;
+package com.example.hw9_maktab28.mainController;
 
 
 import android.app.Activity;
@@ -19,11 +19,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.hw9_maktab28.R;
 import com.example.hw9_maktab28.model.Repository;
 import com.example.hw9_maktab28.model.State;
 import com.example.hw9_maktab28.model.Task;
@@ -36,12 +36,10 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.UUID;
 
-import static com.example.hw9_maktab28.AddTaskFragment.ARG_TAB_ADAPTER;
-import static com.example.hw9_maktab28.AddTaskFragment.ARG_TAB_STATE;
-import static com.example.hw9_maktab28.AddTaskFragment.DATE_PICKER_FRAGMENT_TAG;
-import static com.example.hw9_maktab28.AddTaskFragment.REQUEST_CODE_DATE_PICKER;
-import static com.example.hw9_maktab28.AddTaskFragment.REQUEST_CODE_TIME_PICKER;
-import static com.example.hw9_maktab28.AddTaskFragment.TIME_PICKER_FRAGMENT_TAG;
+import static com.example.hw9_maktab28.mainController.AddTaskFragment.DATE_PICKER_FRAGMENT_TAG;
+import static com.example.hw9_maktab28.mainController.AddTaskFragment.REQUEST_CODE_DATE_PICKER;
+import static com.example.hw9_maktab28.mainController.AddTaskFragment.REQUEST_CODE_TIME_PICKER;
+import static com.example.hw9_maktab28.mainController.AddTaskFragment.TIME_PICKER_FRAGMENT_TAG;
 
 
 /**

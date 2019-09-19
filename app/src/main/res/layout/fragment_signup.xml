@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".SignupFragment"
+    tools:context=".LoginController.SignupFragment"
     android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
     android:id="@+id/signup_fragment">
 

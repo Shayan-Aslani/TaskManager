@@ -1,14 +1,12 @@
-package com.example.hw9_maktab28;
+package com.example.hw9_maktab28.mainController;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.example.hw9_maktab28.model.State;
-import com.google.android.material.tabs.TabLayout;
 
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     public ViewPagerAdapter(FragmentManager fm) {

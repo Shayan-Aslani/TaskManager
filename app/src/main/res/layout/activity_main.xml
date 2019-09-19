@@ -6,6 +6,7 @@
     android:theme="@style/Theme.AppCompat.Light.NoActionBar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/main_container_layout">
+    android:id="@+id/main_container_layout"
+    android:fitsSystemWindows="true">
 
 </FrameLayout>

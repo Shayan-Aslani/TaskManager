@@ -1,21 +1,15 @@
-package com.example.hw9_maktab28;
+package com.example.hw9_maktab28.mainController;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 
-import com.example.hw9_maktab28.model.Repository;
-import com.example.hw9_maktab28.model.State;
-import com.example.hw9_maktab28.model.Task;
-import com.google.android.material.tabs.TabLayout;
+import com.example.hw9_maktab28.R;
 
-import java.util.Random;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {

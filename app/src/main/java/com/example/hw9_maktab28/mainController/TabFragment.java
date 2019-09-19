@@ -1,4 +1,4 @@
-package com.example.hw9_maktab28;
+package com.example.hw9_maktab28.mainController;
 
 
 import android.graphics.Color;
@@ -12,17 +12,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
+import com.example.hw9_maktab28.R;
 import com.example.hw9_maktab28.model.Repository;
 import com.example.hw9_maktab28.model.State;
 import com.example.hw9_maktab28.model.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.tabs.TabLayout;
 
 import java.util.List;
-import java.util.UUID;
 
 
 /**
