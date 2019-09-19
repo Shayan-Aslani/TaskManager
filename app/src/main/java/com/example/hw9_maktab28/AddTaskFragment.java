@@ -55,16 +55,14 @@ public class AddTaskFragment extends DialogFragment {
     private MaterialButton timeButton ;
     private SeekBar stateSeekbar;
     private State tabState;
-    private TaskAdapter taskAdapter;
     private TextView todoSeekBarTxtView , doingseekBarTxtView , doneseekBarTxtView ;
     Calendar taskCalendar = new GregorianCalendar();
 
     private Task mTask = new Task();
 
-    public static AddTaskFragment newInstance(State tabState , TaskAdapter taskAdapter) {
+    public static AddTaskFragment newInstance(State tabState) {
         Bundle args = new Bundle();
         AddTaskFragment fragment = new AddTaskFragment();
-        args.putSerializable(ARG_TAB_ADAPTER , taskAdapter);
         args.putSerializable(ARG_TAB_STATE , tabState);
         fragment.setArguments(args);
         return fragment;
@@ -78,7 +76,6 @@ public class AddTaskFragment extends DialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tabState = (State) getArguments().get(ARG_TAB_STATE);
-        taskAdapter = (TaskAdapter) getArguments().get(ARG_TAB_ADAPTER);
     }
 
     @Override
@@ -91,7 +88,8 @@ public class AddTaskFragment extends DialogFragment {
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        taskAdapter.updateList(Repository.getInstance().getUserStateTaskList(tabState , Repository.getInstance().getLoginedUser().getUserId()));
+        MainActivity.UpdateViewPager();
+
     }
 
     @NonNull
@@ -166,8 +164,7 @@ public class AddTaskFragment extends DialogFragment {
                 okButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if(checkInputs())
-                        {
+                        if(checkInputs()) {
                             addTask();
                             dismiss();
                         }
@@ -192,7 +189,6 @@ public class AddTaskFragment extends DialogFragment {
     }
 
     private void addTask(){
-
         mTask.setTitle(titleEditText.getText().toString());
         mTask.setDescription(descriptionEditText.getText().toString());
         mTask.setDate(taskCalendar.getTime());
@@ -217,7 +213,8 @@ public class AddTaskFragment extends DialogFragment {
             cal2.setTime(date);
             SimpleDateFormat date_format = new SimpleDateFormat("HH:mm:ss");
             timeButton.setText(date_format.format(cal2.getTime()));
-            taskCalendar.set(taskCalendar.get(Calendar.YEAR) , taskCalendar.get(Calendar.MONTH) , taskCalendar.get(Calendar.DAY_OF_MONTH ), cal2.get(Calendar.HOUR_OF_DAY) , cal2.get(Calendar.MINUTE));
+            taskCalendar.set(taskCalendar.get(Calendar.YEAR) , taskCalendar.get(Calendar.MONTH) ,
+                    taskCalendar.get(Calendar.DAY_OF_MONTH ), cal2.get(Calendar.HOUR_OF_DAY) , cal2.get(Calendar.MINUTE));
         }
 
     }

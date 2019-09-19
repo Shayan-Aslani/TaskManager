@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".TabFragment"
+    style="@style/Theme.AppCompat.Light.NoActionBar"
     android:id="@+id/tab_Todo">
 
     <androidx.recyclerview.widget.RecyclerView

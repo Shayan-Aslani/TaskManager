@@ -1,11 +1,14 @@
 package com.example.hw9_maktab28;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.example.hw9_maktab28.model.State;
+import com.google.android.material.tabs.TabLayout;
 
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     public ViewPagerAdapter(FragmentManager fm) {
@@ -15,13 +18,18 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position){
-            case 0: return new TabFragment(State.Todo);
-            case 1: return new TabFragment(State.Doing);
-            case 2: return new TabFragment(State.Done);
+            case 0: return TabFragment.newInstance(State.Todo);
+            case 1: return TabFragment.newInstance(State.Doing);
+            case 2: return TabFragment.newInstance(State.Done);
         }
         return null;
     }
 
+
+    @Override
+    public int getItemPosition(@NonNull Object object) {
+        return POSITION_NONE;
+    }
 
     @Override
     public int getCount() {
@@ -42,4 +50,6 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
                 return null;
         }
     }
+
+
 }

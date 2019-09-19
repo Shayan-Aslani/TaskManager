@@ -56,18 +56,14 @@ public class TaskDetailFragment extends DialogFragment {
     private TextInputEditText descriptionEditText ;
     private MaterialButton dateButton;
     private MaterialButton timeButton ;
-    private TaskAdapter taskAdapter;
-    private State tabState;
     private SeekBar stateSeekbar;
     private TextView todoSeekBarTxtView , doingseekBarTxtView , doneseekBarTxtView ;
     Calendar taskCalendar = new GregorianCalendar();
 
-    public static TaskDetailFragment newInstance(UUID uuid , TaskAdapter taskAdapter , State tabState) {
+    public static TaskDetailFragment newInstance(UUID uuid) {
 
         Bundle args = new Bundle();
         args.putSerializable(ARG_TASK_ID , uuid);
-        args.putSerializable(ARG_TAB_ADAPTER , taskAdapter);
-        args.putSerializable(ARG_TAB_STATE , tabState);
         TaskDetailFragment fragment = new TaskDetailFragment();
         fragment.setArguments(args);
         return fragment;
@@ -80,7 +76,7 @@ public class TaskDetailFragment extends DialogFragment {
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        taskAdapter.updateList(Repository.getInstance().getUserStateTaskList(tabState , Repository.getInstance().getLoginedUser().getUserId()));
+        MainActivity.UpdateViewPager();
     }
 
     @Override
@@ -88,8 +84,6 @@ public class TaskDetailFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
 
         mTask = Repository.getInstance().getTask((UUID)getArguments().getSerializable(ARG_TASK_ID));
-        taskAdapter = (TaskAdapter) getArguments().get(ARG_TAB_ADAPTER);
-        tabState = (State) getArguments().get(ARG_TAB_STATE);
     }
 
     @Override
@@ -158,24 +152,29 @@ public class TaskDetailFragment extends DialogFragment {
         final Dialog detailDialog = new AlertDialog.Builder(getActivity())
                 .setNeutralButton("Delete", null)
                 .setNegativeButton("Edit", null)
-                .setPositiveButton("Save", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        editTask();
-                    }
-                })
+                .setPositiveButton("Save", null)
                 .setView(view)
                 .create();
 
-
         detailDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
-            public void onShow(DialogInterface dialogInterface) {
+            public void onShow(final DialogInterface dialogInterface) {
                 Button editButton = ((AlertDialog) detailDialog).getButton(AlertDialog.BUTTON_NEGATIVE);
                 editButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         setViewEditable(true);
+                    }
+                });
+
+                Button saveButton = ((AlertDialog) detailDialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                saveButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(checkInputs()) {
+                            editTask();
+                            dismiss();
+                        }
                     }
                 });
 
@@ -314,6 +313,14 @@ public class TaskDetailFragment extends DialogFragment {
         return null;
     }
 
+    private boolean checkInputs(){
+        if(titleEditText.getText().toString().isEmpty()){
+            Toast.makeText(getActivity(), "Please input Title !", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+
+    }
 
 
 }

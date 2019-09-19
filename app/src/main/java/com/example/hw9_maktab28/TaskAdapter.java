@@ -2,9 +2,9 @@ package com.example.hw9_maktab28;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,7 +23,7 @@ import java.util.List;
 
 
         private List<Task> taskList;
-        public static Fragment fragment;
+        public  Fragment fragment;
         private RecyclerView recyclerView;
 
         public TaskAdapter(List<Task> taskList , Fragment fragment , RecyclerView recyclerView )
@@ -33,10 +33,6 @@ import java.util.List;
             this.recyclerView = recyclerView;
         }
 
-        public void updateList(List newList){
-            taskList = newList;
-            this.notifyDataSetChanged();
-        }
 
         @NonNull
         @Override
@@ -52,13 +48,15 @@ import java.util.List;
             holder.bind(task);
         }
 
+
         @Override
         public int getItemCount()
         {
             if(taskList.size()> 0 )
                 recyclerView.setBackgroundColor(Color.WHITE);
             else
-                recyclerView.setBackgroundColor(Color.BLUE);
+                recyclerView.setBackgroundResource(R.drawable.ic_custom_background);
+
             return taskList == null ? 0 : taskList.size();
         }
 
@@ -67,16 +65,16 @@ import java.util.List;
         {
             private TextView taskNameTextView ;
             private TextView taskStateTextView;
-            private TextView numberTextView;
+            private TextView dateTextView;
             private TextView letterTextView;
 
 
             public TaskViewHolder(@NonNull final View itemView) {
                 super(itemView);
-                taskNameTextView = itemView.findViewById(R.id.taskName_textView);
+                taskNameTextView = itemView.findViewById(R.id.taskTitle_textView);
                 taskStateTextView = itemView.findViewById(R.id.taskState_textView);
-                numberTextView = itemView.findViewById(R.id.number_textView);
                 letterTextView = itemView.findViewById(R.id.letter_TextView);
+                dateTextView = itemView.findViewById(R.id.date_textView);
 
             }
 
@@ -88,7 +86,7 @@ import java.util.List;
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        TaskDetailFragment taskDetailFragment = TaskDetailFragment.newInstance(task.getId() , TaskAdapter.this , task.getState());
+                        TaskDetailFragment taskDetailFragment = TaskDetailFragment.newInstance(task.getId());
                         taskDetailFragment.setTargetFragment(fragment , 0);
                         taskDetailFragment.show(fragment.getFragmentManager() , TASK_DETAIL_FRAGMENT_TAG);
                     }
@@ -101,8 +99,8 @@ import java.util.List;
 
                 taskNameTextView.setText("Task Name : " + task.getTitle());
                 taskStateTextView.setText("State : " + task.getState().toString());
-                numberTextView.setText("Number : " + (getAdapterPosition()+1));
                 letterTextView.setText(String.valueOf(task.getTitle().charAt(0)));
+                dateTextView.setText("Date : " + task.getDate());
             }
         }
 

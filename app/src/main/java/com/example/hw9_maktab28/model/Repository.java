@@ -43,6 +43,15 @@ public class Repository {
         return stateTaskList;
     }
 
+    public void removeUserTaskList(UUID userId) throws Exception {
+        if(getUserTaskList(userId).size() == 0)
+            return;
+        for (Task task:getUserTaskList(userId))
+            if(task.getUserID().equals(userId))
+                deleteTask(task);
+
+    }
+
     public List<Task> getUserTaskList(UUID userId){
         List<Task> userTaskList = new ArrayList();
         for(Task task : taskList)
@@ -67,18 +76,25 @@ public class Repository {
         Task t = getTask(task.getId());
         if (t == null)
             throw new Exception("This task does not exist!!!");
-
         taskList.remove(t);
     }
 
-    public User getUser(User user){
+    public User getUser(String username , String password){
         for(User u : userList)
-            if(u.equals(user))
+            if(u.equals(new User (username , password)))
                 return u;
 
             return null;
     }
 
+    public User getuser(UUID uuid)
+    {
+        for(User u : userList)
+            if(u.getUserId().equals(uuid))
+                return u;
+
+            return null;
+    }
     public void addUser(User user)
     {
         userList.add(user);
@@ -89,8 +105,8 @@ public class Repository {
         return userList;
     }
 
-    public void setLoginedUser(User user){
-        loginedUser = user;
+    public void setLoginedUser(UUID userid) {
+        loginedUser = getuser(userid);
     }
 
     public User getLoginedUser(){

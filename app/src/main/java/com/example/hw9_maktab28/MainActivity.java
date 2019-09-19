@@ -20,8 +20,9 @@ import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static ViewPagerAdapter viewPagerAdapter;
     public static final String EXTRA_USER_ID = "com.example.hw9_maktab28.userid";
-    private UUID userId;
+    private static UUID userId;
 
     public static Intent newIntent(Context context , UUID userId) {
 
@@ -47,5 +48,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public static void UpdateViewPager(){
+        viewPagerAdapter.notifyDataSetChanged();
+    }
 
 }

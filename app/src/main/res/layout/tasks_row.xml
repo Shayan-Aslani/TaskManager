@@ -12,15 +12,19 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="8dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="8dp">
 
         <TextView
-            android:id="@+id/taskName_textView"
-            android:layout_width="wrap_content"
+            android:id="@+id/taskTitle_textView"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_margin="4dp"
             android:text=""
             android:textSize="24sp"
+            app:layout_constraintBottom_toTopOf="@+id/taskState_textView"
+            app:layout_constraintEnd_toStartOf="@+id/letter_TextView"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -28,16 +32,24 @@
             android:id="@+id/taskState_textView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="4dp"
             android:text=""
+            app:layout_constraintBottom_toTopOf="@+id/date_textView"
             app:layout_constraintEnd_toStartOf="@+id/letter_TextView"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/taskName_textView" />
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@+id/taskTitle_textView"
+            app:layout_constraintTop_toBottomOf="@+id/taskTitle_textView" />
 
         <TextView
-            android:id="@+id/number_textView"
-            android:layout_width="wrap_content"
+            android:id="@+id/date_textView"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/taskState_textView"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="@+id/taskState_textView"
             app:layout_constraintTop_toBottomOf="@+id/taskState_textView" />
 
@@ -45,11 +57,12 @@
             android:id="@+id/letter_TextView"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:layout_margin="8dp"
             android:background="@drawable/letterbackround"
             android:gravity="center"
-            android:textAlignment="center"
-            android:textColor="#26ae90"
-            android:textSize="50dp"
+            android:text="h"
+            android:textColor="@color/colorAccent"
+            android:textSize="40dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

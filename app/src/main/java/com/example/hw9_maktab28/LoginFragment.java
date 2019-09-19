@@ -69,9 +69,8 @@ public class LoginFragment extends Fragment {
             public void onClick(View view) {
 
                 if (loginCheck(usernameEditText.getText().toString(), passwordEditText.getText().toString())) {
-                    User user =  Repository.getInstance().getUser(new User(usernameEditText.getText().toString() , passwordEditText.getText().toString()));
+                    User user =  Repository.getInstance().getUser(usernameEditText.getText().toString() , passwordEditText.getText().toString());
                     startActivity(MainActivity.newIntent(getActivity(), user.getUserId()));
-                    Repository.getInstance().setLoginedUser(user);
                 }
                 else
                     Toast.makeText(getActivity(), "Incorrect Username or Password !", Toast.LENGTH_SHORT).show();

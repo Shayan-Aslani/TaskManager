@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LoginActivity"
+    style="@style/Theme.AppCompat.Light.NoActionBar"
     android:id="@+id/login_container_layout">
 
 </FrameLayout>
