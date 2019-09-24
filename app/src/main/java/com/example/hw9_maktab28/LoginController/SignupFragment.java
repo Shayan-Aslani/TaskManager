@@ -64,7 +64,7 @@ public class SignupFragment extends Fragment {
                 String password = passwordEditText.getText().toString();
                 if(signupCheck(username ,  password))
                 {
-                    Repository.getInstance().addUser(new User(username,password));
+                    Repository.getInstance(getContext()).addUser(new User(username,password));
                     Toast.makeText(getActivity(), "SignUp Succesfully !", Toast.LENGTH_SHORT).show();
                     getActivity().finish();
                 }
@@ -81,7 +81,7 @@ public class SignupFragment extends Fragment {
 
     private boolean signupCheck(String username , String password)
     {
-        for(User user : Repository.getInstance().getUserList()) {
+        for(User user : Repository.getInstance(getContext()).getUserList()) {
             if (user.getUsername().equals(username)) {
                 Toast.makeText(getActivity(), "Invalid Username !", Toast.LENGTH_SHORT).show();
                 return false;

@@ -98,7 +98,7 @@ import java.util.List;
                     itemView.setBackgroundColor(0x804250B2);
 
                 taskNameTextView.setText("Task Name : " + task.getTitle());
-                taskStateTextView.setText("State : " + task.getState().toString());
+//                taskStateTextView.setText("State : " + task.getState().toString());
                 letterTextView.setText(String.valueOf(task.getTitle().charAt(0)));
                 dateTextView.setText("Date : " + task.getDate());
             }

@@ -85,7 +85,7 @@ public class TabFragment extends Fragment {
 
     private void setTaskRecyclerView(){
         taskRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        list = Repository.getInstance().getUserStateTaskList(tabState , Repository.getInstance().getLoginedUser().getUserId());
+        list = Repository.getInstance(getContext()).getUserStateTaskList(tabState , Repository.getInstance(getContext()).getLoginedUser().getUserId());
         taskAdapter = new TaskAdapter(list , this , taskRecyclerView);
         taskRecyclerView.setAdapter(taskAdapter);
         if(list.size() == 0)

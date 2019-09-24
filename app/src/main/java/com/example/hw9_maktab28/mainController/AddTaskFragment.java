@@ -191,7 +191,7 @@ public class AddTaskFragment extends DialogFragment {
         mTask.setDescription(descriptionEditText.getText().toString());
         mTask.setDate(taskCalendar.getTime());
         mTask.setState(getSeekbarState());
-        Repository.getInstance().addTask(mTask);
+        Repository.getInstance(getContext()).insertTask(mTask);
     }
 
     @Override

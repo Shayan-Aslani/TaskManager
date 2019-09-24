@@ -81,7 +81,7 @@ public class TaskDetailFragment extends DialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mTask = Repository.getInstance().getTask((UUID)getArguments().getSerializable(ARG_TASK_ID));
+        mTask = Repository.getInstance(getContext()).getTask((UUID)getArguments().getSerializable(ARG_TASK_ID));
     }
 
     @Override
@@ -266,7 +266,7 @@ public class TaskDetailFragment extends DialogFragment {
         mTask.setDate(taskCalendar.getTime());
         mTask.setState(getSeekbarState());
         try {
-            Repository.getInstance().updateTask(mTask);
+            Repository.getInstance(getContext()).updateTask(mTask);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -274,7 +274,7 @@ public class TaskDetailFragment extends DialogFragment {
 
     private void deleteTask(){
         try {
-            Repository.getInstance().deleteTask(mTask);
+            Repository.getInstance(getContext()).deleteTask(mTask);
         } catch (Exception e) {
             e.printStackTrace();
         }

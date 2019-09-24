@@ -69,7 +69,7 @@ public class LoginFragment extends Fragment {
             public void onClick(View view) {
 
                 if (loginCheck(usernameEditText.getText().toString(), passwordEditText.getText().toString())) {
-                    User user =  Repository.getInstance().getUser(usernameEditText.getText().toString() , passwordEditText.getText().toString());
+                    User user =  Repository.getInstance(getContext()).getUser(usernameEditText.getText().toString() , passwordEditText.getText().toString());
                     startActivity(MainActivity.newIntent(getActivity(), user.getUserId()));
                 }
                 else
@@ -90,7 +90,7 @@ public class LoginFragment extends Fragment {
 
     private boolean loginCheck(String username , String password)
         {
-        if(Repository.getInstance().getUserList().contains(new User(username , password)))
+        if(Repository.getInstance(getContext()).getUserList().contains(new User(username , password)))
         return true;
 
         return false;

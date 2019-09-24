@@ -55,7 +55,7 @@ public class MainFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userId = (UUID) getArguments().getSerializable(ARG_USERID);
-        Repository.getInstance().setLoginedUser(userId);
+        Repository.getInstance(getContext()).setLoginedUser(userId);
         setHasOptionsMenu(true);
     }
 
@@ -130,7 +130,7 @@ public class MainFragment extends Fragment {
     private void deleteAllTask(final UUID userId) {
 
         try {
-            Repository.getInstance().removeUserTaskList(userId);
+            Repository.getInstance(getContext()).removeUserTaskList(userId);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -23,6 +23,10 @@ public class Task {
         this.uuid = UUID.randomUUID();
     }
 
+    public Task(UUID uuid) {
+        this.uuid = uuid;
+    }
+
     public void setState(State state) {
         this.state = state;
     }
@@ -62,6 +66,7 @@ public class Task {
     public void setUserID(UUID userID){
         this.userID = userID;
     }
+
     public State getState() {
         return state;
     }
