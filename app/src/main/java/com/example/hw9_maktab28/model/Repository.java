@@ -10,6 +10,9 @@ import com.example.hw9_maktab28.model.Database.TaskDBSchema;
 import com.example.hw9_maktab28.model.Database.TaskOpenHelper;
 import com.example.hw9_maktab28.model.Database.UserDBSchema;
 
+import org.greenrobot.greendao.AbstractDaoMaster;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -225,6 +228,7 @@ public class Repository {
     }
 
 
+
     public void updateTask(Task task) throws Exception {
         ContentValues values = getTaskContentValues(task);
         String where = TaskDBSchema.Task.Cols.UUID + " = ?";
@@ -302,5 +306,8 @@ public class Repository {
         return loginedUser;
     }
 
+    public File getPhotoFile(Task task) {
+        return new File(mContext.getFilesDir(), task.getPhotoName());
+    }
 
 }

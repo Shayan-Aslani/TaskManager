@@ -1,13 +1,24 @@
 package com.example.hw9_maktab28.model;
 
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Index;
+import org.greenrobot.greendao.annotation.Property;
+
 import java.util.Date;
 import java.util.UUID;
 
+
 public class Task {
+ //   @Property(nameInDb = "title")
         private String title;
+   // @Property(nameInDb = "description")
         private String description;
+    //@Property(nameInDb = "date")
         private Date date;
+ //   @Property(nameInDb = "state")
         private State state;
+   // @Property(nameInDb = "uuid")
+    //@Index(unique = true)
         private UUID uuid;
         private UUID userID ;
 
@@ -21,6 +32,11 @@ public class Task {
     }
     public Task(){
         this.uuid = UUID.randomUUID();
+    }
+
+
+    public String getPhotoName() {
+        return "IMG_" + getId() + ".jpg";
     }
 
     public Task(UUID uuid) {

@@ -21,94 +21,112 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <SeekBar
-        android:id="@+id/taskstate_seekBar_Detail"
-        android:layout_width="281dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="32dp"
-        android:max="2"
-        android:progress="1"
-        app:layout_constraintEnd_toEndOf="@+id/time_Button_Detail"
-        app:layout_constraintStart_toStartOf="@+id/time_Button_Detail"
-        app:layout_constraintTop_toBottomOf="@+id/time_Button_Detail" />
+            android:id="@+id/taskstate_seekBar_Detail"
+            android:layout_width="281dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="32dp"
+            android:max="2"
+            android:progress="1"
+            app:layout_constraintEnd_toEndOf="@+id/time_Button_Detail"
+            app:layout_constraintStart_toStartOf="@+id/time_Button_Detail"
+            app:layout_constraintTop_toBottomOf="@+id/time_Button_Detail" />
 
 
-    <TextView
-    android:id="@+id/todo_SeekBar_TextView_Detail"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="@string/todo"
-    app:layout_constraintBottom_toTopOf="@+id/taskstate_seekBar_Detail"
-    app:layout_constraintStart_toStartOf="@+id/taskstate_seekBar_Detail" />
-
-    <TextView
-        android:id="@+id/doing_SeekBar_TextView_Detail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/doing"
-        app:layout_constraintBottom_toTopOf="@+id/taskstate_seekBar_Detail"
-        app:layout_constraintEnd_toStartOf="@+id/done_SeekBar_TextView_Detail"
-        app:layout_constraintStart_toEndOf="@+id/todo_SeekBar_TextView_Detail" />
-
-    <TextView
-        android:id="@+id/done_SeekBar_TextView_Detail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/done"
-        app:layout_constraintBottom_toTopOf="@+id/taskstate_seekBar_Detail"
-        app:layout_constraintEnd_toEndOf="@+id/taskstate_seekBar_Detail" />
-
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/date_Button_Detail"
-        android:layout_width="272dp"
-        android:layout_height="46dp"
-        android:layout_margin="16dp"
-        app:layout_constraintEnd_toEndOf="@+id/textInputLayout2"
-        app:layout_constraintStart_toStartOf="@+id/textInputLayout2"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/time_Button_Detail"
-        android:layout_width="272dp"
-        android:layout_height="46dp"
-        app:layout_constraintEnd_toEndOf="@+id/date_Button_Detail"
-        app:layout_constraintStart_toStartOf="@+id/date_Button_Detail"
-        app:layout_constraintTop_toBottomOf="@+id/date_Button_Detail" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:hint="@string/title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/title_editText_Detail"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/todo_SeekBar_TextView_Detail"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:text="@string/todo"
+            app:layout_constraintBottom_toTopOf="@+id/taskstate_seekBar_Detail"
+            app:layout_constraintStart_toStartOf="@+id/taskstate_seekBar_Detail" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:hint="@string/description"
-        app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
-        app:layout_constraintStart_toStartOf="@+id/textInputLayout"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/description_editText_Detail"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/doing_SeekBar_TextView_Detail"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp" />
+            android:text="@string/doing"
+            app:layout_constraintBottom_toTopOf="@+id/taskstate_seekBar_Detail"
+            app:layout_constraintEnd_toStartOf="@+id/done_SeekBar_TextView_Detail"
+            app:layout_constraintStart_toEndOf="@+id/todo_SeekBar_TextView_Detail" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            android:id="@+id/done_SeekBar_TextView_Detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/done"
+            app:layout_constraintBottom_toTopOf="@+id/taskstate_seekBar_Detail"
+            app:layout_constraintEnd_toEndOf="@+id/taskstate_seekBar_Detail" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/date_Button_Detail"
+            android:layout_width="272dp"
+            android:layout_height="46dp"
+            android:layout_margin="16dp"
+            app:layout_constraintEnd_toEndOf="@+id/textInputLayout2"
+            app:layout_constraintStart_toStartOf="@+id/textInputLayout2"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/time_Button_Detail"
+            android:layout_width="272dp"
+            android:layout_height="46dp"
+            app:layout_constraintEnd_toEndOf="@+id/date_Button_Detail"
+            app:layout_constraintStart_toStartOf="@+id/date_Button_Detail"
+            app:layout_constraintTop_toBottomOf="@+id/date_Button_Detail" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:hint="@string/title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.491"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/title_editText_Detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/description"
+            app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
+            app:layout_constraintStart_toStartOf="@+id/textInputLayout"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/description_editText_Detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/task_imageView"
+            android:layout_width="62dp"
+            android:layout_height="73dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/taskstate_seekBar_Detail"
+            app:layout_constraintStart_toStartOf="@+id/taskstate_seekBar_Detail"
+            app:layout_constraintTop_toBottomOf="@+id/taskstate_seekBar_Detail"
+            tools:src="@tools:sample/avatars" />
+
+        <ImageButton
+            android:id="@+id/camera_imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_camera"
+            app:layout_constraintEnd_toEndOf="@+id/task_imageView"
+            app:layout_constraintTop_toBottomOf="@+id/task_imageView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
