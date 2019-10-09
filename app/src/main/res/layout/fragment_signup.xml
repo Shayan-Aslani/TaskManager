@@ -42,6 +42,13 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:inputType="textPassword" />
+
+        <CheckBox
+            android:id="@+id/admin_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/signup_as_admin" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton

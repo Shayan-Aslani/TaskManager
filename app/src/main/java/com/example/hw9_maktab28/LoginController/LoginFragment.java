@@ -90,7 +90,7 @@ public class LoginFragment extends Fragment {
 
     private boolean loginCheck(String username , String password)
         {
-        if(Repository.getInstance(getContext()).getUserList().contains(new User(username , password)))
+        if(Repository.getInstance(getContext()).getUserList().contains(new User(username , password , null)))
         return true;
 
         return false;

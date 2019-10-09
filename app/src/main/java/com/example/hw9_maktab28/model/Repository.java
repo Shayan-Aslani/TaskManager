@@ -16,14 +16,14 @@ import java.util.List;
 import java.util.UUID;
 
 public class Repository {
-    private static Repository ourInstance ;
+    private static Repository ourInstance;
 
-    private SQLiteDatabase mDatabase ;
+    private SQLiteDatabase mDatabase;
     private Context mContext;
-    private User loginedUser ;
+    private User loginedUser;
 
     public static Repository getInstance(Context context) {
-        if(ourInstance == null)
+        if (ourInstance == null)
             ourInstance = new Repository(context);
 
         return ourInstance;
@@ -35,13 +35,13 @@ public class Repository {
     }
 
 
-    public void insertTask(Task task){
+    public void insertTask(Task task) {
         task.setUserID(this.getLoginedUser().getUserId());
         ContentValues values = getTaskContentValues(task);
         mDatabase.insertOrThrow(TaskDBSchema.Task.NAME, null, values);
     }
 
-    public void addUser(User user){
+    public void addUser(User user) {
         ContentValues values = getUserContentValues(user);
         mDatabase.insertOrThrow(UserDBSchema.User.NAME, null, values);
     }
@@ -57,14 +57,14 @@ public class Repository {
                 null);
     }
 
-    private Cursor queryUser(String where , String[] whereArgs) {
-        return mDatabase.query(UserDBSchema.User.NAME ,
-                null ,
-                where ,
-                whereArgs ,
-                null ,
-                null ,
-                null );
+    private Cursor queryUser(String where, String[] whereArgs) {
+        return mDatabase.query(UserDBSchema.User.NAME,
+                null,
+                where,
+                whereArgs,
+                null,
+                null,
+                null);
 
     }
 
@@ -104,7 +104,6 @@ public class Repository {
 
         return taskList;
     }
-
 
 
     public Task getTask(UUID uuid) {
@@ -170,10 +169,7 @@ public class Repository {
     }
 
 
-
-
-
-    public User getUser(String inputUsername , String inputPassword) {
+    public User getUser(String inputUsername, String inputPassword) {
         String[] whereArgs = new String[]{inputUsername};
         Cursor cursor = queryUser(UserDBSchema.User.Cols.USERNAME + " = ?", whereArgs);
 
@@ -211,10 +207,15 @@ public class Repository {
             String strUUID = cursor.getString(cursor.getColumnIndex(UserDBSchema.User.Cols.UUID));
             String username = cursor.getString(cursor.getColumnIndex(UserDBSchema.User.Cols.USERNAME));
             String password = cursor.getString(cursor.getColumnIndex(UserDBSchema.User.Cols.PASSWORD));
+            String role = cursor.getString(cursor.getColumnIndex(UserDBSchema.User.Cols.ROLE));
 
             User user = new User(UUID.fromString(strUUID));
             user.setUsername(username);
             user.setPassword(password);
+            if (role.equals("USER"))
+                user.setRole(Role.USER);
+            else
+                user.setRole(Role.ADMIN);
 
             return user;
 
@@ -227,28 +228,27 @@ public class Repository {
     public void updateTask(Task task) throws Exception {
         ContentValues values = getTaskContentValues(task);
         String where = TaskDBSchema.Task.Cols.UUID + " = ?";
-        String[] whereArgs = new String[] {task.getId().toString()};
+        String[] whereArgs = new String[]{task.getId().toString()};
         mDatabase.update(TaskDBSchema.Task.NAME, values, where, whereArgs);
     }
 
-    public void deleteTask(Task task){
+    public void deleteTask(Task task) {
         Task c = getTask(task.getId());
         String where = TaskDBSchema.Task.Cols.UUID + " = ?";
-        String[] whereArgs = new String[] {task.getId().toString()};
-        mDatabase.delete(TaskDBSchema.Task.NAME , where , whereArgs);
+        String[] whereArgs = new String[]{task.getId().toString()};
+        mDatabase.delete(TaskDBSchema.Task.NAME, where, whereArgs);
 
     }
-
 
 
     private ContentValues getTaskContentValues(Task task) {
         ContentValues taskValues = new ContentValues();
         taskValues.put(TaskDBSchema.Task.Cols.UUID, task.getId().toString());
         taskValues.put(TaskDBSchema.Task.Cols.TITLE, task.getTitle());
-        taskValues.put(TaskDBSchema.Task.Cols.DESCRIPTION , task.getDescription());
-        taskValues.put(TaskDBSchema.Task.Cols.DATE , task.getDate().getTime());
-        taskValues.put(TaskDBSchema.Task.Cols.USERID , task.getUserID().toString());
-        taskValues.put(TaskDBSchema.Task.Cols.STATE , task.getState().toString());
+        taskValues.put(TaskDBSchema.Task.Cols.DESCRIPTION, task.getDescription());
+        taskValues.put(TaskDBSchema.Task.Cols.DATE, task.getDate().getTime());
+        taskValues.put(TaskDBSchema.Task.Cols.USERID, task.getUserID().toString());
+        taskValues.put(TaskDBSchema.Task.Cols.STATE, task.getState().toString());
 
         return taskValues;
     }
@@ -257,15 +257,16 @@ public class Repository {
         ContentValues userValues = new ContentValues();
         userValues.put(UserDBSchema.User.Cols.UUID, user.getUserId().toString());
         userValues.put(UserDBSchema.User.Cols.USERNAME, user.getUsername());
-        userValues.put(UserDBSchema.User.Cols.PASSWORD , user.getPassword());
+        userValues.put(UserDBSchema.User.Cols.PASSWORD, user.getPassword());
+        userValues.put(UserDBSchema.User.Cols.ROLE , user.getRole().name());
 
         return userValues;
     }
 
-    public List getUserStateTaskList(State state , UUID userId){
+    public List getUserStateTaskList(State state, UUID userId) {
         List<Task> stateTaskList = new ArrayList<>();
-        for(Task task : getUserTaskList(userId)){
-            if(task.getState().equals(state))
+        for (Task task : getUserTaskList(userId)) {
+            if (task.getState().equals(state))
                 stateTaskList.add(task);
         }
         return stateTaskList;
@@ -274,33 +275,30 @@ public class Repository {
     }
 
     public void removeUserTaskList(UUID userId) throws Exception {
-        if(getUserTaskList(userId).size() == 0)
+        if (getUserTaskList(userId).size() == 0)
             return;
-        for (Task task:getUserTaskList(userId))
-            if(task.getUserID().equals(userId))
+        for (Task task : getUserTaskList(userId))
+            if (task.getUserID().equals(userId))
                 deleteTask(task);
 
     }
 
-    public List<Task> getUserTaskList(UUID userId){
+    public List<Task> getUserTaskList(UUID userId) {
         List<Task> userTaskList = new ArrayList();
         List<Task> list = getTasks();
-        for(Task task : list)
-            if(task.getUserID().equals(userId))
+        for (Task task : list)
+            if (task.getUserID().equals(userId))
                 userTaskList.add(task);
 
-            return userTaskList;
+        return userTaskList;
     }
-
-
-
 
 
     public void setLoginedUser(UUID userid) {
         loginedUser = getUser(userid);
     }
 
-    public User getLoginedUser(){
+    public User getLoginedUser() {
         return loginedUser;
     }
 

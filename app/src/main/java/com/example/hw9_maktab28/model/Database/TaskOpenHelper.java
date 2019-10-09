@@ -33,7 +33,8 @@ public class TaskOpenHelper extends SQLiteOpenHelper {
                 UserDBSchema.User.Cols._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 UserDBSchema.User.Cols.UUID + ", " +
                 UserDBSchema.User.Cols.USERNAME + ", " +
-                UserDBSchema.User.Cols.PASSWORD +
+                UserDBSchema.User.Cols.PASSWORD + ", " +
+                UserDBSchema.User.Cols.ROLE +
                 ");");
 
 

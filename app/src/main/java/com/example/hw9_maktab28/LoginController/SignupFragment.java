@@ -10,10 +10,12 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 import com.example.hw9_maktab28.R;
 import com.example.hw9_maktab28.model.Repository;
+import com.example.hw9_maktab28.model.Role;
 import com.example.hw9_maktab28.model.User;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
@@ -28,6 +30,7 @@ public class SignupFragment extends Fragment {
     private TextInputEditText usernameEditText ;
     private TextInputEditText passwordEditText;
     private MaterialButton signupButton;
+    private CheckBox adminCheckbox ;
 
     public static SignupFragment newInstance() {
 
@@ -62,9 +65,15 @@ public class SignupFragment extends Fragment {
 
                 String username =  usernameEditText.getText().toString();
                 String password = passwordEditText.getText().toString();
+                Role role ;
+                if(adminCheckbox.isChecked())
+                    role = Role.ADMIN;
+                else
+                    role = Role.USER;
+
                 if(signupCheck(username ,  password))
                 {
-                    Repository.getInstance(getContext()).addUser(new User(username,password));
+                    Repository.getInstance(getContext()).addUser(new User(username,password , role ));
                     Toast.makeText(getActivity(), "SignUp Succesfully !", Toast.LENGTH_SHORT).show();
                     getActivity().finish();
                 }
@@ -77,6 +86,7 @@ public class SignupFragment extends Fragment {
         usernameEditText = view.findViewById(R.id.username_EditText_signup);
         passwordEditText = view.findViewById(R.id.password_EditText_signup);
         signupButton = view.findViewById(R.id.signup_Button_signupFragment);
+        adminCheckbox = view.findViewById(R.id.admin_checkbox);
     }
 
     private boolean signupCheck(String username , String password)

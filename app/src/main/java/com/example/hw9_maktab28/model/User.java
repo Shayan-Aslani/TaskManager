@@ -6,6 +6,7 @@ public class User {
 
     private String username;
     private String password;
+    private Role role;
     private UUID userId;
 
     public User(UUID uuid) {
@@ -28,11 +29,22 @@ public class User {
         this.password = password;
     }
 
-    public User(String username, String password) {
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public User(String username, String password , Role role) {
         this.username = username;
         this.password = password;
         this.userId = UUID.randomUUID();
+        this.role = role;
     }
+
+
 
     public UUID getUserId(){
         return this.userId;

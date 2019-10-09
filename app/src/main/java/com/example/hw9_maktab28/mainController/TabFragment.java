@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.hw9_maktab28.R;
 import com.example.hw9_maktab28.model.Repository;
+import com.example.hw9_maktab28.model.Role;
 import com.example.hw9_maktab28.model.State;
 import com.example.hw9_maktab28.model.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -91,7 +92,10 @@ public class TabFragment extends Fragment {
 
     private void setTaskRecyclerView(){
         taskRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        list = Repository.getInstance(getContext()).getUserStateTaskList(tabState , Repository.getInstance(getContext()).getLoginedUser().getUserId());
+        if(Repository.getInstance(getContext()).getLoginedUser().getRole().equals(Role.USER))
+            list = Repository.getInstance(getContext()).getUserStateTaskList(tabState , Repository.getInstance(getContext()).getLoginedUser().getUserId());
+        else
+            list = Repository.getInstance(getContext()).getTasks();
         taskAdapter = new TaskAdapter(list , this , taskRecyclerView);
         taskRecyclerView.setAdapter(taskAdapter);
     }
