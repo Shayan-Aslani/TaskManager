@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filterable;
+import android.widget.Toast;
 
 import com.example.hw9_maktab28.R;
 import com.example.hw9_maktab28.model.Repository;
@@ -31,7 +33,7 @@ public class TabFragment extends Fragment {
     public static final int REQUEST_CODE_ADD_TASK = 0;
     private RecyclerView taskRecyclerView;
     private List<Task> list;
-    private TaskAdapter taskAdapter;
+    public static TaskAdapter taskAdapter;
     private State tabState ;
     private FloatingActionButton fab;
     public static final String ARG_TAB_STATE = "TabState";
@@ -51,11 +53,15 @@ public class TabFragment extends Fragment {
         // Required empty public constructor
     }
 
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tabState = (State) getArguments().getSerializable(ARG_TAB_STATE);
+
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,10 +94,6 @@ public class TabFragment extends Fragment {
         list = Repository.getInstance(getContext()).getUserStateTaskList(tabState , Repository.getInstance(getContext()).getLoginedUser().getUserId());
         taskAdapter = new TaskAdapter(list , this , taskRecyclerView);
         taskRecyclerView.setAdapter(taskAdapter);
-        if(list.size() == 0)
-            taskRecyclerView.setBackgroundColor(Color.BLUE);
-        else
-            taskRecyclerView.setBackgroundColor(Color.WHITE);
     }
 
 

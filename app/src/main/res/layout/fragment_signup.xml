@@ -13,7 +13,7 @@
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="68dp"
-        android:hint="username"
+        android:hint="@string/username"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,7 +31,7 @@
         android:id="@+id/textInputLayout2"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:hint="password"
+        android:hint="@string/password"
         app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
         app:layout_constraintStart_toStartOf="@+id/textInputLayout"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
@@ -49,7 +49,7 @@
         android:layout_width="272dp"
         android:layout_height="46dp"
         android:layout_margin="16dp"
-        android:text="signup"
+        android:text="@string/signup"
         app:layout_constraintEnd_toEndOf="@+id/textInputLayout2"
         app:layout_constraintStart_toStartOf="@+id/textInputLayout2"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />

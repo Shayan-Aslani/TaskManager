@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,7 +8,19 @@
     android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
     tools:context=".mainController.TaskDetailFragment">
 
-    <SeekBar
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/share_button_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_share"
+            app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <SeekBar
         android:id="@+id/taskstate_seekBar_Detail"
         android:layout_width="281dp"
         android:layout_height="30dp"
@@ -21,18 +33,18 @@
 
 
     <TextView
-        android:id="@+id/todo_SeekBar_TextView_Detail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ToDo"
-        app:layout_constraintBottom_toTopOf="@+id/taskstate_seekBar_Detail"
-        app:layout_constraintStart_toStartOf="@+id/taskstate_seekBar_Detail" />
+    android:id="@+id/todo_SeekBar_TextView_Detail"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/todo"
+    app:layout_constraintBottom_toTopOf="@+id/taskstate_seekBar_Detail"
+    app:layout_constraintStart_toStartOf="@+id/taskstate_seekBar_Detail" />
 
     <TextView
         android:id="@+id/doing_SeekBar_TextView_Detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Doing"
+        android:text="@string/doing"
         app:layout_constraintBottom_toTopOf="@+id/taskstate_seekBar_Detail"
         app:layout_constraintEnd_toStartOf="@+id/done_SeekBar_TextView_Detail"
         app:layout_constraintStart_toEndOf="@+id/todo_SeekBar_TextView_Detail" />
@@ -41,7 +53,7 @@
         android:id="@+id/done_SeekBar_TextView_Detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Done"
+        android:text="@string/done"
         app:layout_constraintBottom_toTopOf="@+id/taskstate_seekBar_Detail"
         app:layout_constraintEnd_toEndOf="@+id/taskstate_seekBar_Detail" />
 
@@ -68,7 +80,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:hint="Title"
+        android:hint="@string/title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
@@ -85,7 +97,7 @@
         android:id="@+id/textInputLayout2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Description"
+        android:hint="@string/description"
         app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
         app:layout_constraintStart_toStartOf="@+id/textInputLayout"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
@@ -97,6 +109,7 @@
             android:layout_margin="16dp" />
 
     </com.google.android.material.textfield.TextInputLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

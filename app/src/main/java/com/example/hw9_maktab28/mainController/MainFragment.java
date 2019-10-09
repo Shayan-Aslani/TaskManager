@@ -2,6 +2,8 @@ package com.example.hw9_maktab28.mainController;
 
 
 import android.app.AlertDialog;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +20,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.example.hw9_maktab28.R;
 import com.example.hw9_maktab28.model.Repository;
@@ -35,7 +39,8 @@ public class MainFragment extends Fragment {
 
     private UUID userId;
     private ViewPagerAdapter viewPagerAdapter;
-
+    private SearchView searchView = null;
+    private SearchView.OnQueryTextListener queryTextListener;
 
     public static MainFragment newInstance(UUID userId) {
 
@@ -57,6 +62,7 @@ public class MainFragment extends Fragment {
         userId = (UUID) getArguments().getSerializable(ARG_USERID);
         Repository.getInstance(getContext()).setLoginedUser(userId);
         setHasOptionsMenu(true);
+
     }
 
     @Override
@@ -77,16 +83,43 @@ public class MainFragment extends Fragment {
         TabLayout tabLayout = view.findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
         MainActivity.viewPagerAdapter = viewPagerAdapter;
-
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
 
         inflater.inflate(R.menu.main_fragment_menu, menu);
 
+        MenuItem searchItem = menu.findItem(R.id.app_bar_search);
+        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+
+
+        if (searchItem != null) {
+            searchView = (SearchView) searchItem.getActionView();
+        }
+        if (searchView != null) {
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+
+            queryTextListener = new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    TabFragment.taskAdapter.getFilter().filter(newText);
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    TabFragment.taskAdapter.getFilter().filter(query);
+                    return true;
+                }
+            };
+            searchView.setOnQueryTextListener(queryTextListener);
+        }
+
+        super.onCreateOptionsMenu(menu, inflater);
+
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -106,7 +139,6 @@ public class MainFragment extends Fragment {
                         .create()
                         .show();
 
-
                 return true;
             case R.id.menu_item_logout:
                 new AlertDialog.Builder(getContext())
@@ -122,10 +154,16 @@ public class MainFragment extends Fragment {
                         .create()
                         .show();
                 return true;
-            default:
-                return super.onOptionsItemSelected(item);
+            case R.id.app_bar_search :
+                return false;
         }
+
+        searchView.setOnQueryTextListener(queryTextListener);
+
+        return super.onOptionsItemSelected(item);
     }
+
+
 
     private void deleteAllTask(final UUID userId) {
 

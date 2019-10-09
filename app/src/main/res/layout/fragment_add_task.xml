@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,6 +9,9 @@
     android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
     tools:context=".mainController.TaskDetailFragment">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     <SeekBar
         android:id="@+id/taskstate_seekBar"
@@ -27,7 +30,7 @@
         android:id="@+id/todo_SeekBar_TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ToDo"
+        android:text="@string/todo"
         app:layout_constraintBottom_toTopOf="@+id/taskstate_seekBar"
         app:layout_constraintStart_toStartOf="@+id/taskstate_seekBar" />
 
@@ -35,7 +38,7 @@
         android:id="@+id/doing_SeekBar_TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Doing"
+        android:text="@string/doing"
         app:layout_constraintBottom_toTopOf="@+id/taskstate_seekBar"
         app:layout_constraintEnd_toStartOf="@+id/done_SeekBar_TextView"
         app:layout_constraintHorizontal_bias="0.497"
@@ -45,7 +48,7 @@
         android:id="@+id/done_SeekBar_TextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Done"
+        android:text="@string/done"
         app:layout_constraintBottom_toTopOf="@+id/taskstate_seekBar"
         app:layout_constraintEnd_toEndOf="@+id/taskstate_seekBar" />
 
@@ -54,20 +57,20 @@
         android:layout_width="272dp"
         android:layout_height="46dp"
         android:layout_margin="16dp"
-        android:text="Set Date"
+        android:text="@string/set_date"
         app:layout_constraintEnd_toEndOf="@+id/textInputLayout2"
         app:layout_constraintStart_toStartOf="@+id/textInputLayout2"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/timeSet_Button_Add"
-        android:layout_width="272dp"
-        android:layout_height="46dp"
-        android:text="Set Time"
-        app:layout_constraintEnd_toEndOf="@+id/dateSet_Button_Add"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/signup_Button_signupFragment"
-        app:layout_constraintTop_toBottomOf="@+id/dateSet_Button_Add" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/timeSet_Button_Add"
+            android:layout_width="272dp"
+            android:layout_height="46dp"
+            android:text="@string/set_time"
+            app:layout_constraintEnd_toEndOf="@+id/dateSet_Button_Add"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/dateSet_Button_Add"
+            app:layout_constraintTop_toBottomOf="@+id/dateSet_Button_Add" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout"
@@ -75,7 +78,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:layout_marginTop="68dp"
-        android:hint="Title"
+        android:hint="@string/title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
@@ -92,7 +95,7 @@
         android:id="@+id/textInputLayout2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Description"
+        android:hint="@string/description"
         app:layout_constraintEnd_toEndOf="@+id/textInputLayout"
         app:layout_constraintStart_toStartOf="@+id/textInputLayout"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
@@ -104,5 +107,5 @@
             android:layout_margin="16dp" />
     </com.google.android.material.textfield.TextInputLayout>
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

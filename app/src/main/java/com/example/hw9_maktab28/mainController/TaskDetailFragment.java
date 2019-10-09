@@ -11,6 +11,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ShareCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
@@ -19,6 +20,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,6 +56,7 @@ public class TaskDetailFragment extends DialogFragment {
     private TextInputEditText descriptionEditText ;
     private MaterialButton dateButton;
     private MaterialButton timeButton ;
+    private ImageButton shareButton;
     private SeekBar stateSeekbar;
     private TextView todoSeekBarTxtView , doingseekBarTxtView , doneseekBarTxtView ;
     Calendar taskCalendar = new GregorianCalendar();
@@ -101,6 +104,18 @@ public class TaskDetailFragment extends DialogFragment {
         initUi(view);
         getDetail();
         setViewEditable(false);
+
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ShareCompat.IntentBuilder shareIntent = ShareCompat.IntentBuilder.from(getActivity());
+                shareIntent.setText(mTask.getTitle() + " : " + mTask.getDescription());
+                shareIntent.getIntent().setAction(Intent.ACTION_SEND);
+                shareIntent.getIntent().setType("text/plain");
+                startActivity(shareIntent.getIntent());
+            }
+        });
+
 
         dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -235,6 +250,7 @@ public class TaskDetailFragment extends DialogFragment {
         todoSeekBarTxtView = view.findViewById(R.id.todo_SeekBar_TextView_Detail);
         doingseekBarTxtView = view.findViewById(R.id.doing_SeekBar_TextView_Detail);
         doneseekBarTxtView = view.findViewById(R.id.done_SeekBar_TextView_Detail);
+        shareButton = view.findViewById(R.id.share_button_detail);
     }
 
     private void getDetail(){
