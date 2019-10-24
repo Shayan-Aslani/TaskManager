@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -24,7 +25,9 @@ import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.hw9_maktab28.R;
+import com.example.hw9_maktab28.UserListFragment;
 import com.example.hw9_maktab28.model.Repository;
+import com.example.hw9_maktab28.model.Role;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.UUID;
@@ -39,13 +42,13 @@ public class MainFragment extends Fragment {
 
     private UUID userId;
     private ViewPagerAdapter viewPagerAdapter;
-    private SearchView searchView = null;
-    private SearchView.OnQueryTextListener queryTextListener;
+    private ViewPager viewPager;
+
 
     public static MainFragment newInstance(UUID userId) {
 
         Bundle args = new Bundle();
-        args.putSerializable(ARG_USERID , userId);
+        args.putSerializable(ARG_USERID, userId);
         MainFragment fragment = new MainFragment();
         fragment.setArguments(args);
         return fragment;
@@ -56,11 +59,12 @@ public class MainFragment extends Fragment {
         // Required empty public constructor
     }
 
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userId = (UUID) getArguments().getSerializable(ARG_USERID);
-        Repository.getInstance(getContext()).setLoginedUser(userId);
+
         setHasOptionsMenu(true);
 
     }
@@ -70,6 +74,7 @@ public class MainFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
+
         return inflater.inflate(R.layout.fragment_main, container, false);
     }
 
@@ -77,49 +82,22 @@ public class MainFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        final ViewPager viewPager = view.findViewById(R.id.pager);
+        viewPager = view.findViewById(R.id.pager);
         viewPagerAdapter = new ViewPagerAdapter(getFragmentManager());
         viewPager.setAdapter(viewPagerAdapter);
         TabLayout tabLayout = view.findViewById(R.id.tablayout);
         tabLayout.setupWithViewPager(viewPager);
-        MainActivity.viewPagerAdapter = viewPagerAdapter;
     }
+
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-
-        inflater.inflate(R.menu.main_fragment_menu, menu);
-
-        MenuItem searchItem = menu.findItem(R.id.app_bar_search);
-        SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-
-
-        if (searchItem != null) {
-            searchView = (SearchView) searchItem.getActionView();
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if (Repository.getInstance(getContext()).getLoginedUser().getRole().equals(Role.ADMIN)) {
+            menu.findItem(R.id.menu_userlist).setVisible(true);
+            menu.findItem(R.id.menu_item_remove_all).setVisible(false);
         }
-        if (searchView != null) {
-            searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-
-            queryTextListener = new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextChange(String newText) {
-                    TabFragment.taskAdapter.getFilter().filter(newText);
-                    return true;
-                }
-
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-                    TabFragment.taskAdapter.getFilter().filter(query);
-                    return true;
-                }
-            };
-            searchView.setOnQueryTextListener(queryTextListener);
-        }
-
-        super.onCreateOptionsMenu(menu, inflater);
-
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -132,10 +110,10 @@ public class MainFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 deleteAllTask(userId);
-                                MainActivity.UpdateViewPager();
+                                updateViewPager();
                             }
                         })
-                        .setNegativeButton(android.R.string.cancel , null)
+                        .setNegativeButton(android.R.string.cancel, null)
                         .create()
                         .show();
 
@@ -150,19 +128,23 @@ public class MainFragment extends Fragment {
                                 getActivity().finish();
                             }
                         })
-                        .setNegativeButton(android.R.string.cancel , null)
+                        .setNegativeButton(android.R.string.cancel, null)
                         .create()
                         .show();
                 return true;
-            case R.id.app_bar_search :
+            case R.id.app_bar_search:
+                return false;
+            case R.id.menu_userlist:
+                getFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.main_container_layout, UserListFragment.newInstance())
+                        .addToBackStack("")
+                        .commit();
                 return false;
         }
 
-        searchView.setOnQueryTextListener(queryTextListener);
-
         return super.onOptionsItemSelected(item);
     }
-
 
 
     private void deleteAllTask(final UUID userId) {
@@ -173,4 +155,10 @@ public class MainFragment extends Fragment {
             e.printStackTrace();
         }
     }
+
+
+    public void updateViewPager() {
+        viewPagerAdapter.notifyDataSetChanged();
+    }
+
 }

@@ -3,21 +3,30 @@ package com.example.hw9_maktab28.mainController;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,13 +35,16 @@ import com.example.hw9_maktab28.R;
 import com.example.hw9_maktab28.model.Repository;
 import com.example.hw9_maktab28.model.State;
 import com.example.hw9_maktab28.model.Task;
+import com.example.hw9_maktab28.utils.PictureUtils;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 
 /**
@@ -45,7 +57,10 @@ public class AddTaskFragment extends DialogFragment {
     public static final int REQUEST_CODE_DATE_PICKER = 0;
     public static final int REQUEST_CODE_TIME_PICKER = 1;
     public static final String ARG_TAB_STATE = "TabState";
-    public static final String ARG_TAB_ADAPTER = "TabAdapter";
+
+    private static final int REQUEST_CODE_CAPTURE_IMAGE = 2;
+    public static final String FILE_PROVIDER_AUTHORITY = "com.example.hw9_maktab28.fileProvider";
+
 
     private TextInputEditText titleEditText ;
     private TextInputEditText descriptionEditText ;
@@ -54,9 +69,17 @@ public class AddTaskFragment extends DialogFragment {
     private SeekBar stateSeekbar;
     private State tabState;
     private TextView todoSeekBarTxtView , doingseekBarTxtView , doneseekBarTxtView ;
+    private ImageView taskImgeView;
+    private MaterialButton imageButtonPhoto;
+    private File photoFile;
+    private Uri photoUri;
+    private Intent cameraIntent;
+
     Calendar taskCalendar = new GregorianCalendar();
 
     private Task mTask = new Task();
+
+    private Callbacks mCallbaks;
 
     public static AddTaskFragment newInstance(State tabState) {
         Bundle args = new Bundle();
@@ -71,24 +94,45 @@ public class AddTaskFragment extends DialogFragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if(context instanceof Callbacks)
+            mCallbaks = (Callbacks) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+        mCallbaks = null;
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         tabState = (State) getArguments().get(ARG_TAB_STATE);
+
+        cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        photoFile = Repository.getInstance(getContext()).getPhotoFile(mTask);
+        photoUri = FileProvider.getUriForFile(getContext(), FILE_PROVIDER_AUTHORITY, photoFile);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        if (getActivity()
+                .getPackageManager()
+                .resolveActivity(cameraIntent, PackageManager.MATCH_DEFAULT_ONLY) == null
+                ||
+                photoFile == null)
+            taskImgeView.setEnabled(false);
+
         return inflater.inflate(R.layout.fragment_add_task, container, false);
     }
 
-    @Override
-    public void onDismiss(DialogInterface dialog) {
-        super.onDismiss(dialog);
-        MainActivity.UpdateViewPager();
 
-    }
 
     @NonNull
     @Override
@@ -99,6 +143,7 @@ public class AddTaskFragment extends DialogFragment {
 
         initUi(view);
         setSeekbarState(tabState);
+        updatePhotoView();
 
         dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,6 +160,15 @@ public class AddTaskFragment extends DialogFragment {
                 TimePickerFragment timePickerFragment = TimePickerFragment.newInstance(new Date());
                 timePickerFragment.setTargetFragment(AddTaskFragment.this , REQUEST_CODE_TIME_PICKER);
                 timePickerFragment.show(getFragmentManager() , TIME_PICKER_FRAGMENT_TAG);
+            }
+        });
+
+        imageButtonPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                grantCameraPermission(photoUri);
+                startActivityForResult(cameraIntent, REQUEST_CODE_CAPTURE_IMAGE);
             }
         });
 
@@ -164,6 +218,7 @@ public class AddTaskFragment extends DialogFragment {
                     public void onClick(View view) {
                         if(checkInputs()) {
                             addTask();
+                            mCallbaks.onTaskAdded();
                             dismiss();
                         }
                     }
@@ -184,6 +239,8 @@ public class AddTaskFragment extends DialogFragment {
         todoSeekBarTxtView = view.findViewById(R.id.todo_SeekBar_TextView);
         doingseekBarTxtView = view.findViewById(R.id.doing_SeekBar_TextView);
         doneseekBarTxtView = view.findViewById(R.id.done_SeekBar_TextView);
+        taskImgeView = view.findViewById(R.id.task_imageView_add);
+        imageButtonPhoto = view.findViewById(R.id.camera_imageButton_add);
     }
 
     private void addTask(){
@@ -213,6 +270,9 @@ public class AddTaskFragment extends DialogFragment {
             timeButton.setText(date_format.format(cal2.getTime()));
             taskCalendar.set(taskCalendar.get(Calendar.YEAR) , taskCalendar.get(Calendar.MONTH) ,
                     taskCalendar.get(Calendar.DAY_OF_MONTH ), cal2.get(Calendar.HOUR_OF_DAY) , cal2.get(Calendar.MINUTE));
+        } else if (requestCode == REQUEST_CODE_CAPTURE_IMAGE) {
+            getActivity().revokeUriPermission(photoUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            updatePhotoView();
         }
 
     }
@@ -255,5 +315,29 @@ public class AddTaskFragment extends DialogFragment {
 
     }
 
+    private void grantCameraPermission(Uri photoUri) {
+        //grant uri permission to camera
+        List<ResolveInfo> cameraActivities = getActivity().getPackageManager()
+                .queryIntentActivities(cameraIntent, PackageManager.MATCH_DEFAULT_ONLY);
+        for (ResolveInfo activity : cameraActivities) {
+            getActivity().grantUriPermission(activity.activityInfo.packageName,
+                    photoUri,
+                    Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        }
+    }
+
+    private void updatePhotoView() {
+        if (photoFile == null || !photoFile.exists()) {
+            taskImgeView.setImageDrawable(null);
+        } else {
+            Bitmap bitmap = PictureUtils
+                    .getScaledBitmap(photoFile.getAbsolutePath(), getActivity());
+            taskImgeView.setImageBitmap(bitmap);
+        }
+    }
+
+    public interface Callbacks{
+        void onTaskAdded();
+    }
 
 }

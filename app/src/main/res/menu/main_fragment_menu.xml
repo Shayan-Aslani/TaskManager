@@ -13,6 +13,12 @@
         android:icon="@drawable/ic_action_logout"
         app:showAsAction="ifRoom|withText"/>
 
+    <item
+        android:id="@+id/menu_userlist"
+        android:icon="@drawable/ic_icon_users"
+        android:title="userList"
+        android:visible="false"
+        app:showAsAction="always" />
     <item android:title="Remove All Task"
         android:id="@+id/menu_item_remove_all"
         android:icon="@drawable/ic_action_remove"

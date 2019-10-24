@@ -1,6 +1,7 @@
 package com.example.hw9_maktab28.mainController;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +16,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hw9_maktab28.R;
+import com.example.hw9_maktab28.model.Repository;
+import com.example.hw9_maktab28.model.Role;
 import com.example.hw9_maktab28.model.Task;
 import com.google.android.material.card.MaterialCardView;
 
@@ -32,10 +35,12 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
 
     private List<Task> taskList;
     private List<Task> filteredTaskList;
-    public Fragment fragment;
+    private Fragment fragment;
     private RecyclerView recyclerView;
+    private Context mContext ;
 
-    public TaskAdapter(List<Task> taskList, Fragment fragment, RecyclerView recyclerView) {
+    public TaskAdapter(Context context , List<Task> taskList, Fragment fragment, RecyclerView recyclerView) {
+        this.mContext = context;
         this.taskList = taskList;
         this.filteredTaskList = taskList;
         this.fragment = fragment;
@@ -83,11 +88,10 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
                     for (Task row : taskList) {
 
                         if (row.getTitle().toLowerCase().contains(charString.toLowerCase()) ||
-                                row.getDescription().contains(charString.toLowerCase()) || row.getDate().toString().contains(charString.toLowerCase())) {
+                                row.getDescription().contains(charString.toLowerCase())) {
                             filteredList.add(row);
                         }
                     }
-
                     filteredTaskList = filteredList;
                 }
 
@@ -140,10 +144,13 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             else
                 ((MaterialCardView) itemView).setCardBackgroundColor(0x804250B2);
 */
-            taskNameTextView.setText("Task Name : " + task.getTitle());
-            taskStateTextView.setText("State : " + task.getState().toString());
+            taskNameTextView.setText(task.getTitle());
+            if(Repository.getInstance(mContext).getLoginedUser().getRole().equals(Role.USER))
+                taskStateTextView.setText(task.getState().toString());
+            else if(Repository.getInstance(mContext).getLoginedUser().getRole().equals(Role.ADMIN))
+                taskStateTextView.setText("User : " + Repository.getInstance(mContext).getUser(task.getUserID()).getUsername());
             letterTextView.setText(String.valueOf(task.getTitle().charAt(0)));
-            dateTextView.setText("Date : " + task.getDate());
+            dateTextView.setText( task.getDate().toString());
         }
     }
 

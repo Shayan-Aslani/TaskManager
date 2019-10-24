@@ -69,7 +69,9 @@ public class LoginFragment extends Fragment {
             public void onClick(View view) {
 
                 if (loginCheck(usernameEditText.getText().toString(), passwordEditText.getText().toString())) {
-                    User user =  Repository.getInstance(getContext()).getUser(usernameEditText.getText().toString() , passwordEditText.getText().toString());
+                    User user =  Repository.getInstance(getContext()).getUser(usernameEditText.getText().toString()
+                            , passwordEditText.getText().toString());
+                    Repository.getInstance(getContext()).setLoginedUser(user.getUserId());
                     startActivity(MainActivity.newIntent(getActivity(), user.getUserId()));
                 }
                 else
