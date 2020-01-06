@@ -1,4 +1,4 @@
-package com.example.hw9_maktab28;
+package com.example.hw9_maktab28.mainController;
 
 
 import android.os.Bundle;
@@ -13,12 +13,9 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.hw9_maktab28.mainController.TaskDetailFragment;
-import com.example.hw9_maktab28.mainController.UserDetailFragment;
+import com.example.hw9_maktab28.R;
 import com.example.hw9_maktab28.model.Repository;
 import com.example.hw9_maktab28.model.User;
 

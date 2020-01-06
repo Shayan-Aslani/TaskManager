@@ -3,17 +3,12 @@ package com.example.hw9_maktab28.mainController;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.viewpager.widget.ViewPager;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.hw9_maktab28.R;
-import com.example.hw9_maktab28.UserListFragment;
-import com.example.hw9_maktab28.model.Repository;
-import com.example.hw9_maktab28.model.Role;
-import com.example.hw9_maktab28.model.Task;
 
 import java.util.UUID;
 

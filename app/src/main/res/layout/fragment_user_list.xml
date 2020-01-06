@@ -6,7 +6,7 @@
     android:background="@color/white"
     android:fitsSystemWindows="true"
     android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
-    tools:context=".UserListFragment">
+    tools:context=".mainController.UserListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/userList_recyclerView"

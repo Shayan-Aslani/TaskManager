@@ -76,7 +76,7 @@ public class TaskDetailFragment extends DialogFragment {
     private TextInputEditText descriptionEditText;
     private MaterialButton dateButton;
     private MaterialButton timeButton;
-    private ImageButton shareButton;
+    private MaterialButton shareButton;
     private SeekBar stateSeekbar;
     private TextView todoSeekBarTxtView, doingseekBarTxtView, doneseekBarTxtView;
 

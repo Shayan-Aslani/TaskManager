@@ -2,10 +2,7 @@ package com.example.hw9_maktab28.mainController;
 
 
 import android.app.AlertDialog;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -17,15 +14,11 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SearchView;
-import android.widget.Toast;
 
 import com.example.hw9_maktab28.R;
-import com.example.hw9_maktab28.UserListFragment;
 import com.example.hw9_maktab28.model.Repository;
 import com.example.hw9_maktab28.model.Role;
 import com.google.android.material.tabs.TabLayout;
